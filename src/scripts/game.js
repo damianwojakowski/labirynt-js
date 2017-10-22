@@ -29,8 +29,13 @@
     var PLAYER_POSITION = {X: 2, Y: 2};
 
     // loop this after click or push key events
-    var context2d = initializeBoardAndReturnContext2d();
-    play(context2d);
+    var CONTEXT_2D = initializeBoardAndReturnContext2d();
+
+    function getContext2d() {
+        return CONTEXT_2D;
+    }
+
+    play();
 
     function initializeBoardAndReturnContext2d() {
         var canvas = document.getElementById(SETTINGS.GAME_ID);
@@ -42,7 +47,9 @@
         return canvas.getContext("2d");
     }
 
-    function play(context2d) {
+    function play() {
+        var context2d = getContext2d();
+
         drawBoard(context2d);
         drawPlayer(context2d);
     }
@@ -68,6 +75,13 @@
         });
     }
 
+    var KEY_CODES = {
+        ARROW_UP: 38,
+        ARROW_DOWN: 40,
+        ARROW_LEFT: 37,
+        ARROW_RIGHT: 39
+    };
+
     function drawPlayer(context2d) {
         context2d.beginPath();
         context2d.arc((PLAYER_POSITION.X + 1) * SETTINGS.GRID_SIZE, (PLAYER_POSITION.Y + 1) * SETTINGS.GRID_SIZE, SETTINGS.GRID_SIZE / 2, 0, 2 * Math.PI);
@@ -75,9 +89,64 @@
         context2d.fill();
     }
 
-    document.addEventListener('keypress', function (event) {
-        var keyName = event.key;
-        alert('keypress event\n\n' + 'key: ' + keyName);
-    });
+    document.addEventListener('keydown', movePlayer);
+
+    function movePlayer(event) {
+
+        if (event.keyCode === KEY_CODES.ARROW_UP) {
+            tryToMoveUp();
+        } else if (event.keyCode === KEY_CODES.ARROW_DOWN) {
+            tryToMoveDown();
+        } else if (event.keyCode === KEY_CODES.ARROW_LEFT) {
+            tryToMoveLeft();
+        } else if (event.keyCode === KEY_CODES.ARROW_RIGHT) {
+            tryToMoveRight();
+        }
+
+        play();
+
+        if (didWin()) {
+            showWinPage();
+        }
+
+    }
+
+    function didWin() {
+        return board[PLAYER_POSITION.Y][PLAYER_POSITION.X] === ELEMENTS.END_POINT
+    }
+
+    function showWinPage() {
+        alert("YOU FOUND THE EXIT!");
+    }
+
+    function tryToMoveUp() {
+        if (canMoveTo(PLAYER_POSITION.Y - 1, PLAYER_POSITION.X)) {
+            PLAYER_POSITION.Y--;
+        }
+    }
+
+    function tryToMoveDown() {
+        if (canMoveTo(PLAYER_POSITION.Y + 1, PLAYER_POSITION.X)) {
+            PLAYER_POSITION.Y++;
+        }
+    }
+
+    function tryToMoveLeft() {
+        if (canMoveTo(PLAYER_POSITION.Y, PLAYER_POSITION.X - 1)) {
+            PLAYER_POSITION.X--;
+        }
+    }
+
+    function tryToMoveRight() {
+        if (canMoveTo(PLAYER_POSITION.Y, PLAYER_POSITION.X + 1)) {
+            PLAYER_POSITION.X++;
+        }
+    }
+
+    function canMoveTo(newPositionY, newPositionX) {
+        return board[newPositionY][newPositionX] === ELEMENTS.FREE_SPACE ||
+            board[newPositionY][newPositionX] === ELEMENTS.END_POINT;
+
+    }
 
 })();

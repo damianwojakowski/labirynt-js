@@ -2,7 +2,7 @@
     console.log('game loaded');
 
     var SETTINGS = {
-        GRID_SIZE: 60,
+        GRID_SIZE: 30,
         GAME_ID: 'game',
         SIZE: 600
     };
@@ -18,12 +18,14 @@
     };
 
     var board = [
-        ['WW', 'WW', 'WW', 'WW', '!!', 'WW'],
-        ['WW', '00', '00', 'WW', '00', 'WW'],
-        ['WW', '00', '00', 'WW', '00', 'WW'],
-        ['WW', '00', 'WW', 'WW', '00', 'WW'],
-        ['WW', '00', '00', '00', '00', 'WW'],
-        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW']
+        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
+        ['WW', '00', '00', 'WW', '00', '00', '!!'],
+        ['WW', '00', '00', 'WW', '00', 'WW', 'WW'],
+        ['WW', '00', 'WW', 'WW', '00', 'WW', 'WW'],
+        ['WW', '00', 'WW', '00', '00', '00', 'WW'],
+        ['WW', '00', 'WW', '00', 'WW', '00', 'WW'],
+        ['WW', '00', '00', '00', '00', '00', 'WW'],
+        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
     ];
 
     var PLAYER_POSITION = {X: 2, Y: 2};
@@ -106,7 +108,7 @@
         play();
 
         if (didWin()) {
-            showWinPage();
+            setTimeout(showWinPage, 0);//showWinPage();
         }
 
     }

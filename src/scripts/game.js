@@ -1,4 +1,4 @@
-(function () {
+(function (generator) {
     console.log('game loaded');
 
     var SETTINGS = {
@@ -13,20 +13,9 @@
         END_POINT: '!!'
     };
 
-    var COLOURS = {
+    var COLOURS = {};
 
-    };
-
-    var board = [
-        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
-        ['WW', '00', '00', 'WW', '00', '00', '!!'],
-        ['WW', '00', '00', 'WW', '00', 'WW', 'WW'],
-        ['WW', '00', 'WW', 'WW', '00', 'WW', 'WW'],
-        ['WW', '00', 'WW', '00', '00', '00', 'WW'],
-        ['WW', '00', 'WW', '00', 'WW', '00', 'WW'],
-        ['WW', '00', '00', '00', '00', '00', 'WW'],
-        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
-    ];
+    var board = generator.generateBoard();
 
     var PLAYER_POSITION = {X: 2, Y: 2};
 
@@ -151,4 +140,4 @@
 
     }
 
-})();
+})(window.GENERATOR());

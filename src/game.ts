@@ -46,10 +46,10 @@ export function startGame() {
 
     function initializeBoardAndReturnContext2d() {
         let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById(SETTINGS.GAME_ID);
-        canvas.width = SETTINGS.SIZE;//horizontal resolution (?) - increase for better looking text
-        canvas.height = SETTINGS.SIZE;//vertical resolution (?) - increase for better looking text
-        canvas.style.width = String(SETTINGS.SIZE);//actual width of canvas
-        canvas.style.height = String(SETTINGS.SIZE);//actual height of canvas
+        canvas.width = SETTINGS.SIZE; //horizontal resolution (?) - increase for better looking text
+        canvas.height = SETTINGS.SIZE; //vertical resolution (?) - increase for better looking text
+        canvas.style.width = String(SETTINGS.SIZE); //actual width of canvas
+        canvas.style.height = String(SETTINGS.SIZE); //actual height of canvas
 
         return canvas.getContext("2d");
     }
@@ -113,7 +113,7 @@ export function startGame() {
         play();
 
         if (didWin()) {
-            setTimeout(showWinPage, 0);//showWinPage();
+            setTimeout(showWinPage, 0);
         }
 
     }

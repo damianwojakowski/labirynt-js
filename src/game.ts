@@ -17,8 +17,6 @@ export function startGame() {
         END_POINT: '!!'
     };
 
-    let COLOURS = {};
-
     let board = generator.generateLevel();
 
     let PLAYER_POSITION = {X: 2, Y: 2};

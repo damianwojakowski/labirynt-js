@@ -1,3 +1,4 @@
-import {startGame} from './game';
+import {GameManager} from "./GameManager";
 
-startGame();
+let gameManager = new GameManager();
+gameManager.startGame();

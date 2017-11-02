@@ -1,7 +1,6 @@
 import {LevelGenerator} from "./level/LevelGenerator";
 
 export function startGame() {
-    console.log('game loaded');
 
     let generator = new LevelGenerator();
 
@@ -27,8 +26,6 @@ export function startGame() {
     function getContext2d() {
         return CONTEXT_2D;
     }
-
-    play();
 
     function initializeBoardAndReturnContext2d() {
         let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById(SETTINGS.GAME_ID);
@@ -85,7 +82,6 @@ export function startGame() {
     document.addEventListener('keydown', movePlayer);
 
     function movePlayer(event: KeyboardEvent ) {
-
         if (event.keyCode === KEY_CODES.ARROW_UP) {
             tryToMoveUp();
         } else if (event.keyCode === KEY_CODES.ARROW_DOWN) {
@@ -101,15 +97,6 @@ export function startGame() {
         if (didWin()) {
             setTimeout(showWinPage, 0);
         }
-
-    }
-
-    function didWin() {
-        return board[PLAYER_POSITION.Y][PLAYER_POSITION.X] === ELEMENTS.END_POINT
-    }
-
-    function showWinPage() {
-        alert("YOU FOUND THE EXIT!");
     }
 
     function tryToMoveUp() {
@@ -141,5 +128,15 @@ export function startGame() {
             board[newPositionY][newPositionX] === ELEMENTS.END_POINT;
 
     }
+
+    function didWin() {
+        return board[PLAYER_POSITION.Y][PLAYER_POSITION.X] === ELEMENTS.END_POINT
+    }
+
+    function showWinPage() {
+        alert("YOU FOUND THE EXIT!");
+    }
+
+    play();
 
 }

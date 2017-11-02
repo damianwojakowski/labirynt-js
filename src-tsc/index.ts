@@ -1,6 +1,9 @@
-import 'Greeter';
+//import {Greeter} from './Greeter';
+import {startGame} from './game';
 
-let greeter = new Greeter();
-let text = greeter.sayHelloWithName("Dupa");
+//let greeter = new Greeter();
+//let text = Greeter.sayHelloWithName("Dupa");
 
-console.log(text);
+startGame();
+
+//console.log(text);

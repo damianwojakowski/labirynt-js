@@ -1,11 +1,10 @@
 module.exports = {
     entry: "./src-tsc/index.ts",
     output: {
-        filename: "bundle.js"
+        filename: "./build/bundle.js"
     },
     resolve: {
-        // Add '.ts' and '.tsx' as a resolvable extension.
-        extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
     module: {
         loaders: [

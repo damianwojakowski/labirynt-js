@@ -1,10 +1,10 @@
-class Greeter {
+export class Greeter {
 
-    public sayHello(): string {
+    public static sayHello(): string {
         return "Hello...";
     }
 
-    public sayHelloWithName(name: string): string {
+    public static sayHelloWithName(name: string): string {
         return "Hello " + name
     }
 }

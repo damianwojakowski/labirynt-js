@@ -1,40 +1,42 @@
-(function () {
+export function startGame() {
 
-    var generator = function generateBoard() {
-        return [
-            ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
-            ['WW', '00', '00', 'WW', '00', '00', '!!'],
-            ['WW', '00', '00', 'WW', '00', 'WW', 'WW'],
-            ['WW', '00', 'WW', 'WW', '00', 'WW', 'WW'],
-            ['WW', '00', 'WW', '00', '00', '00', 'WW'],
-            ['WW', '00', 'WW', '00', 'WW', '00', 'WW'],
-            ['WW', '00', '00', '00', '00', '00', 'WW'],
-            ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
-        ];
-    }
+    let generator = {
+        generateBoard: function () {
+            return [
+                ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
+                ['WW', '00', '00', 'WW', '00', '00', '!!'],
+                ['WW', '00', '00', 'WW', '00', 'WW', 'WW'],
+                ['WW', '00', 'WW', 'WW', '00', 'WW', 'WW'],
+                ['WW', '00', 'WW', '00', '00', '00', 'WW'],
+                ['WW', '00', 'WW', '00', 'WW', '00', 'WW'],
+                ['WW', '00', '00', '00', '00', '00', 'WW'],
+                ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
+            ];
+        }
+    };
 
     console.log('game loaded');
 
-    var SETTINGS = {
+    let SETTINGS = {
         GRID_SIZE: 30,
         GAME_ID: 'game',
         SIZE: 600
     };
 
-    var ELEMENTS = {
+    let ELEMENTS = {
         WALL: 'WW',
         FREE_SPACE: '00',
         END_POINT: '!!'
     };
 
-    var COLOURS = {};
+    let COLOURS = {};
 
-    var board = generator.generateBoard();
+    let board = generator.generateBoard();
 
-    var PLAYER_POSITION = {X: 2, Y: 2};
+    let PLAYER_POSITION = {X: 2, Y: 2};
 
     // loop this after click or push key events
-    var CONTEXT_2D = initializeBoardAndReturnContext2d();
+    let CONTEXT_2D = initializeBoardAndReturnContext2d();
 
     function getContext2d() {
         return CONTEXT_2D;
@@ -43,7 +45,7 @@
     play();
 
     function initializeBoardAndReturnContext2d() {
-        var canvas = document.getElementById(SETTINGS.GAME_ID);
+        let canvas = document.getElementById(SETTINGS.GAME_ID);
         canvas.width=SETTINGS.SIZE;//horizontal resolution (?) - increase for better looking text
         canvas.height=SETTINGS.SIZE;//vertical resolution (?) - increase for better looking text
         canvas.style.width=SETTINGS.SIZE;//actual width of canvas
@@ -53,7 +55,7 @@
     }
 
     function play() {
-        var context2d = getContext2d();
+        let context2d = getContext2d();
 
         drawBoard(context2d);
         drawPlayer(context2d);
@@ -80,7 +82,7 @@
         });
     }
 
-    var KEY_CODES = {
+    let KEY_CODES = {
         ARROW_UP: 38,
         ARROW_DOWN: 40,
         ARROW_LEFT: 37,
@@ -154,4 +156,4 @@
 
     }
 
-})();
+}

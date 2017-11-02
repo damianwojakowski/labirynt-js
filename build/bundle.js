@@ -119,8 +119,8 @@ function startGame() {
         var canvas = document.getElementById(SETTINGS.GAME_ID);
         canvas.width = SETTINGS.SIZE;
         canvas.height = SETTINGS.SIZE;
-        canvas.style.width = SETTINGS.SIZE;
-        canvas.style.height = SETTINGS.SIZE;
+        canvas.style.width = String(SETTINGS.SIZE);
+        canvas.style.height = String(SETTINGS.SIZE);
         return canvas.getContext("2d");
     }
     function play() {

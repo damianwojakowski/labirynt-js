@@ -45,27 +45,27 @@ export function startGame() {
     play();
 
     function initializeBoardAndReturnContext2d() {
-        let canvas = document.getElementById(SETTINGS.GAME_ID);
-        canvas.width=SETTINGS.SIZE;//horizontal resolution (?) - increase for better looking text
-        canvas.height=SETTINGS.SIZE;//vertical resolution (?) - increase for better looking text
-        canvas.style.width=SETTINGS.SIZE;//actual width of canvas
-        canvas.style.height=SETTINGS.SIZE;//actual height of canvas
+        let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById(SETTINGS.GAME_ID);
+        canvas.width = SETTINGS.SIZE;//horizontal resolution (?) - increase for better looking text
+        canvas.height = SETTINGS.SIZE;//vertical resolution (?) - increase for better looking text
+        canvas.style.width = String(SETTINGS.SIZE);//actual width of canvas
+        canvas.style.height = String(SETTINGS.SIZE);//actual height of canvas
 
         return canvas.getContext("2d");
     }
 
     function play() {
-        let context2d = getContext2d();
+        let context2d: CanvasRenderingContext2D = getContext2d();
 
         drawBoard(context2d);
         drawPlayer(context2d);
     }
 
-    function drawBoard(context2d) {
+    function drawBoard(context2d: CanvasRenderingContext2D) {
         drawElements(context2d);
     }
 
-    function drawElements(context2d) {
+    function drawElements(context2d: CanvasRenderingContext2D) {
         board.forEach(function (elements, indexY) {
             elements.forEach(function (element, indexX) {
                 context2d.beginPath();
@@ -89,7 +89,7 @@ export function startGame() {
         ARROW_RIGHT: 39
     };
 
-    function drawPlayer(context2d) {
+    function drawPlayer(context2d: CanvasRenderingContext2D) {
         context2d.beginPath();
         context2d.arc((PLAYER_POSITION.X + 1) * SETTINGS.GRID_SIZE, (PLAYER_POSITION.Y + 1) * SETTINGS.GRID_SIZE, SETTINGS.GRID_SIZE / 2, 0, 2 * Math.PI);
         context2d.fillStyle = 'pink';
@@ -98,7 +98,7 @@ export function startGame() {
 
     document.addEventListener('keydown', movePlayer);
 
-    function movePlayer(event) {
+    function movePlayer(event: KeyboardEvent ) {
 
         if (event.keyCode === KEY_CODES.ARROW_UP) {
             tryToMoveUp();
@@ -150,7 +150,7 @@ export function startGame() {
         }
     }
 
-    function canMoveTo(newPositionY, newPositionX) {
+    function canMoveTo(newPositionY: any, newPositionX: any) {
         return board[newPositionY][newPositionX] === ELEMENTS.FREE_SPACE ||
             board[newPositionY][newPositionX] === ELEMENTS.END_POINT;
 

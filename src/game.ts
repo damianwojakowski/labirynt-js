@@ -1,21 +1,9 @@
+import {LevelGenerator} from "./level/LevelGenerator";
+
 export function startGame() {
-
-    let generator = {
-        generateBoard: function () {
-            return [
-                ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
-                ['WW', '00', '00', 'WW', '00', '00', '!!'],
-                ['WW', '00', '00', 'WW', '00', 'WW', 'WW'],
-                ['WW', '00', 'WW', 'WW', '00', 'WW', 'WW'],
-                ['WW', '00', 'WW', '00', '00', '00', 'WW'],
-                ['WW', '00', 'WW', '00', 'WW', '00', 'WW'],
-                ['WW', '00', '00', '00', '00', '00', 'WW'],
-                ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
-            ];
-        }
-    };
-
     console.log('game loaded');
+
+    let generator = new LevelGenerator();
 
     let SETTINGS = {
         GRID_SIZE: 30,
@@ -31,7 +19,7 @@ export function startGame() {
 
     let COLOURS = {};
 
-    let board = generator.generateBoard();
+    let board = generator.generateLevel();
 
     let PLAYER_POSITION = {X: 2, Y: 2};
 

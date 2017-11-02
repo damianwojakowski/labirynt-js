@@ -81,22 +81,10 @@ game_1.startGame();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var LevelGenerator_1 = __webpack_require__(2);
 function startGame() {
-    var generator = {
-        generateBoard: function () {
-            return [
-                ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
-                ['WW', '00', '00', 'WW', '00', '00', '!!'],
-                ['WW', '00', '00', 'WW', '00', 'WW', 'WW'],
-                ['WW', '00', 'WW', 'WW', '00', 'WW', 'WW'],
-                ['WW', '00', 'WW', '00', '00', '00', 'WW'],
-                ['WW', '00', 'WW', '00', 'WW', '00', 'WW'],
-                ['WW', '00', '00', '00', '00', '00', 'WW'],
-                ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
-            ];
-        }
-    };
     console.log('game loaded');
+    var generator = new LevelGenerator_1.LevelGenerator();
     var SETTINGS = {
         GRID_SIZE: 30,
         GAME_ID: 'game',
@@ -108,7 +96,7 @@ function startGame() {
         END_POINT: '!!'
     };
     var COLOURS = {};
-    var board = generator.generateBoard();
+    var board = generator.generateLevel();
     var PLAYER_POSITION = { X: 2, Y: 2 };
     var CONTEXT_2D = initializeBoardAndReturnContext2d();
     function getContext2d() {
@@ -212,6 +200,33 @@ function startGame() {
     }
 }
 exports.startGame = startGame;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LevelGenerator = (function () {
+    function LevelGenerator() {
+    }
+    LevelGenerator.prototype.generateLevel = function () {
+        return [
+            ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
+            ['WW', '00', '00', 'WW', '00', '00', '!!'],
+            ['WW', '00', '00', 'WW', '00', 'WW', 'WW'],
+            ['WW', '00', 'WW', 'WW', '00', 'WW', 'WW'],
+            ['WW', '00', 'WW', '00', '00', '00', 'WW'],
+            ['WW', '00', 'WW', '00', 'WW', '00', 'WW'],
+            ['WW', '00', '00', '00', '00', '00', 'WW'],
+            ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
+        ];
+    };
+    return LevelGenerator;
+}());
+exports.LevelGenerator = LevelGenerator;
 
 
 /***/ })

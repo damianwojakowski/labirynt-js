@@ -1,7 +1,7 @@
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: "./src/index.ts",
+    entry: "./src/main.ts",
     plugins: [
         new CopyWebpackPlugin([
             { from: './src/template', to: './build'}

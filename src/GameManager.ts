@@ -1,5 +1,5 @@
 import {LevelGenerator} from "./level/LevelGenerator";
-import {GameSettings} from "./GameSettings";
+import {GameSettings} from "./settings/GameSettings";
 
 export class GameManager {
 

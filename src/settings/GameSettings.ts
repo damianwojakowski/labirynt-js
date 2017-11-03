@@ -8,27 +8,27 @@ export class GameSettings {
     private ELEMENT_FREE_SPACE = '00';
     private ELEMENT_END_POINT = '!!';
 
-    public getGridSize() {
+    public getGridSize(): number {
         return this.GRID_SIZE;
     }
 
-    public getGameId() {
+    public getGameId(): string {
         return this.GAME_ID;
     }
 
-    public getLevelSize() {
+    public getLevelSize(): number {
         return this.LEVEL_SIZE;
     }
 
-    public getElementWall() {
+    public getElementWall(): string {
         return this.ELEMENT_WALL;
     }
 
-    public getElementFreeSpace() {
+    public getElementFreeSpace(): string {
         return this.ELEMENT_FREE_SPACE;
     }
 
-    public getElementEndPoint() {
+    public getElementEndPoint(): string {
         return this.ELEMENT_END_POINT;
     }
 }

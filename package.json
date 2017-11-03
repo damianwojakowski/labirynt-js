@@ -2,7 +2,7 @@
   "name": "labirynt",
   "version": "0.0.1",
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.spec.ts"
+    "test": "mocha -r ts-node/register -r ignore-styles -r jsdom-global/register tests/**/*.spec.ts"
   },
   "dependencies": {
     "typescript": "^2.6.1"

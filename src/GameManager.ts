@@ -1,80 +1,34 @@
 import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
-import {GameSettings} from "./settings/GameSettings";
 import {LevelGenerator} from "./level/LevelGenerator";
 import {LevelElements} from "./level/LevelElements";
 import {Player} from "./Player";
+import {GameBoard} from "./GameBoard";
 
 export class GameManager {
 
     constructor(
         levelGenerator: LevelGenerator,
         levelElements: LevelElements,
-        gameSettings: GameSettings,
-        player: Player
+        player: Player,
+        gameBoard: GameBoard
     ) {
         this.levelGenerator = levelGenerator;
         this.levelElements = levelElements;
-        this.settings = gameSettings;
         this.player = player;
+        this.gameBoard = gameBoard;
 
         this.board = this.levelGenerator.generateLevel();
-        this.CONTEXT_2D = this.initializeBoardAndReturnContext2d();
     }
 
-    private settings: GameSettings;
     private levelGenerator: InMemoryLevelGenerator;
     private board: Array<Array<string>>;
-    private CONTEXT_2D: CanvasRenderingContext2D;
     private levelElements: LevelElements;
     private player: Player;
-
-    public getContext2d() {
-        return this.CONTEXT_2D;
-    }
-
-    initializeBoardAndReturnContext2d() {
-        let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById(this.settings.getGameId());
-        canvas.width = this.settings.getLevelSize(); //horizontal resolution (?) - increase for better looking text
-        canvas.height = this.settings.getLevelSize(); //vertical resolution (?) - increase for better looking text
-        canvas.style.width = String(this.settings.getLevelSize()); //actual width of canvas
-        canvas.style.height = String(this.settings.getLevelSize()); //actual height of canvas
-
-        return canvas.getContext("2d");
-    }
+    private gameBoard: GameBoard;
 
     public play() {
-        let context2d: CanvasRenderingContext2D = this.getContext2d();
-        this.drawBoard(context2d);
-        this.drawPlayer(context2d);
-    }
-
-    public drawBoard(context2d: CanvasRenderingContext2D) {
-        this.drawElements(context2d);
-    }
-
-    public drawElements(context2d: CanvasRenderingContext2D) {
-        this.board.forEach((elements: Array<string>, indexY: number) => {
-            elements.forEach((element: string, indexX: number) => {
-                let gridSize = this.settings.getGridSize();
-                context2d.beginPath();
-                context2d.arc(
-                    (indexX + 1) * gridSize,
-                    (indexY + 1) * gridSize,
-                    gridSize / 2,
-                    0,
-                    2 * Math.PI
-                );
-
-                if (element === this.levelElements.getWall()) {
-                    context2d.fillStyle = 'black';
-                } else if (element === this.levelElements.getExit()) {
-                    context2d.fillStyle = 'blue';
-                } else {
-                    context2d.fillStyle = 'white';
-                }
-                context2d.fill();
-            });
-        });
+        this.gameBoard.drawBoard(this.board);
+        this.gameBoard.drawPlayer(this.player);
     }
 
     public KEY_CODES = {
@@ -83,21 +37,6 @@ export class GameManager {
         ARROW_LEFT: 37,
         ARROW_RIGHT: 39
     };
-
-    public drawPlayer(context2d: CanvasRenderingContext2D) {
-        let gridSize = this.settings.getGridSize();
-
-        context2d.beginPath();
-        context2d.arc(
-            (this.player.getPositionX() + 1) * gridSize,
-            (this.player.getPositionY() + 1) * gridSize,
-            gridSize / 2,
-            0,
-            2 * Math.PI
-        );
-        context2d.fillStyle = 'pink';
-        context2d.fill();
-    }
 
     public movePlayer(event: KeyboardEvent) {
         if (event.keyCode === this.KEY_CODES.ARROW_UP) {
@@ -161,6 +100,7 @@ export class GameManager {
     }
 
     public startGame() {
+        this.gameBoard.initializeBoard();
         document.addEventListener('keydown', this.movePlayer.bind(this), false);
         this.play();
     }

@@ -10,6 +10,10 @@ describe('GameSettings', () => {
         gridSize = new GameSettings();
     });
 
+    afterEach(() => {
+        gridSize = null;
+    });
+
     it('should return grid size as a number', () => {
         expect(gridSize.getGridSize()).is.a('number');
     });

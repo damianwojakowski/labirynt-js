@@ -2,7 +2,7 @@
   "name": "labirynt",
   "version": "0.0.1",
   "scripts": {
-    "test": "mocha -r ts-node/register -r ignore-styles -r jsdom-global/register src/**/*.spec.ts",
+    "test": "mocha -r ts-node/register -r ignore-styles -r jsdom-global/register src/*.spec.ts src/**/*.spec.ts",
     "build": "webpack"
   },
   "dependencies": {

@@ -5,9 +5,9 @@ import {GameBoard} from "./GameBoard";
 
 describe('GameBoard', () => {
 
-    it('should return grid size as a number', () => {
+    it('should init', () => {
         let gameBoard = new GameBoard();
-        expect(gameBoard).is.not.null();
+        expect(gameBoard).is.not.equal(null);
     });
 
 });

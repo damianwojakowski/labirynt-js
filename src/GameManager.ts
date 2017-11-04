@@ -42,11 +42,8 @@ export class GameManager {
         return canvas.getContext("2d");
     }
 
-    public PLAYER_POSITION = {X: 2, Y: 2};
-
     public play() {
         let context2d: CanvasRenderingContext2D = this.getContext2d();
-
         this.drawBoard(context2d);
         this.drawPlayer(context2d);
     }
@@ -92,8 +89,8 @@ export class GameManager {
 
         context2d.beginPath();
         context2d.arc(
-            (this.PLAYER_POSITION.X + 1) * gridSize,
-            (this.PLAYER_POSITION.Y + 1) * gridSize,
+            (this.player.getPositionX() + 1) * gridSize,
+            (this.player.getPositionY() + 1) * gridSize,
             gridSize / 2,
             0,
             2 * Math.PI
@@ -121,26 +118,30 @@ export class GameManager {
     }
 
     public tryToMoveUp() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y - 1, this.PLAYER_POSITION.X)) {
-            this.PLAYER_POSITION.Y--;
+        let playerPositionY = this.player.getPositionY();
+        if (this.canMoveTo(playerPositionY- 1, this.player.getPositionX())) {
+            this.player.setPositionY(playerPositionY - 1);
         }
     }
 
     public tryToMoveDown() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y + 1, this.PLAYER_POSITION.X)) {
-            this.PLAYER_POSITION.Y++;
+        let playerPositionY = this.player.getPositionY();
+        if (this.canMoveTo(playerPositionY + 1, this.player.getPositionX())) {
+            this.player.setPositionY(playerPositionY + 1);
         }
     }
 
     public tryToMoveLeft() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y, this.PLAYER_POSITION.X - 1)) {
-            this.PLAYER_POSITION.X--;
+        let playerPositionX = this.player.getPositionX();
+        if (this.canMoveTo(this.player.getPositionY(), playerPositionX - 1)) {
+            this.player.setPositionX(playerPositionX - 1);
         }
     }
 
     public tryToMoveRight() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y, this.PLAYER_POSITION.X + 1)) {
-            this.PLAYER_POSITION.X++;
+        let playerPositionX = this.player.getPositionX();
+        if (this.canMoveTo(this.player.getPositionY(), playerPositionX + 1)) {
+            this.player.setPositionX(playerPositionX + 1);
         }
     }
 
@@ -151,7 +152,8 @@ export class GameManager {
     }
 
     public didWin() {
-        return this.board[this.PLAYER_POSITION.Y][this.PLAYER_POSITION.X] === this.levelElements.getExit()
+        return this.board[this.player.getPositionY()][this.player.getPositionX()] ===
+            this.levelElements.getExit()
     }
 
     public showWinPage() {

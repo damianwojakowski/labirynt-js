@@ -38,12 +38,6 @@ export class GameManager {
         return canvas.getContext("2d");
     }
 
-    public ELEMENTS = {
-        WALL: 'WW',
-        FREE_SPACE: '00',
-        EXIT: '!!'
-    };
-
     public PLAYER_POSITION = {X: 2, Y: 2};
 
     public play() {
@@ -70,9 +64,9 @@ export class GameManager {
                     2 * Math.PI
                 );
 
-                if (element === this.ELEMENTS.WALL) {
+                if (element === this.levelElements.getWall()) {
                     context2d.fillStyle = 'black';
-                } else if (element === this.ELEMENTS.EXIT) {
+                } else if (element === this.levelElements.getExit()) {
                     context2d.fillStyle = 'blue';
                 } else {
                     context2d.fillStyle = 'white';
@@ -147,13 +141,13 @@ export class GameManager {
     }
 
     public canMoveTo(newPositionY: any, newPositionX: any) {
-        return this.board[newPositionY][newPositionX] === this.ELEMENTS.FREE_SPACE ||
-            this.board[newPositionY][newPositionX] === this.ELEMENTS.EXIT;
+        return this.board[newPositionY][newPositionX] === this.levelElements.getFreeSpace() ||
+            this.board[newPositionY][newPositionX] === this.levelElements.getExit();
 
     }
 
     public didWin() {
-        return this.board[this.PLAYER_POSITION.Y][this.PLAYER_POSITION.X] === this.ELEMENTS.EXIT
+        return this.board[this.PLAYER_POSITION.Y][this.PLAYER_POSITION.X] === this.levelElements.getExit()
     }
 
     public showWinPage() {

@@ -2,17 +2,20 @@ import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
 import {GameSettings} from "./settings/GameSettings";
 import {LevelGenerator} from "./level/LevelGenerator";
 import {LevelElements} from "./level/LevelElements";
+import {Player} from "./Player";
 
 export class GameManager {
 
     constructor(
         levelGenerator: LevelGenerator,
         levelElements: LevelElements,
-        gameSettings: GameSettings
+        gameSettings: GameSettings,
+        player: Player
     ) {
         this.levelGenerator = levelGenerator;
         this.levelElements = levelElements;
         this.settings = gameSettings;
+        this.player = player;
 
         this.board = this.levelGenerator.generateLevel();
         this.CONTEXT_2D = this.initializeBoardAndReturnContext2d();
@@ -23,6 +26,7 @@ export class GameManager {
     private board: Array<Array<string>>;
     private CONTEXT_2D: CanvasRenderingContext2D;
     private levelElements: LevelElements;
+    private player: Player;
 
     public getContext2d() {
         return this.CONTEXT_2D;

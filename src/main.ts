@@ -2,14 +2,13 @@ import {GameManager} from "./GameManager";
 import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
 import {LevelElements} from "./level/LevelElements";
 import {GameSettings} from "./settings/GameSettings";
-
-let levelGenerator = new InMemoryLevelGenerator();
-let levelElements = new LevelElements();
-let gameSettings = new GameSettings();
+import {Player} from "./Player";
 
 let gameManager = new GameManager(
-    levelGenerator,
-    levelElements,
-    gameSettings
+    new InMemoryLevelGenerator(),
+    new LevelElements(),
+    new GameSettings(),
+    new Player()
 );
+
 gameManager.startGame();

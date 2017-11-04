@@ -1,12 +1,19 @@
 import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
 import {GameSettings} from "./settings/GameSettings";
 import {LevelGenerator} from "./level/LevelGenerator";
+import {LevelElements} from "./level/LevelElements";
 
 export class GameManager {
 
-    constructor(levelGenerator: LevelGenerator) {
+    constructor(
+        levelGenerator: LevelGenerator,
+        levelElements: LevelElements,
+        gameSettings: GameSettings
+    ) {
         this.levelGenerator = levelGenerator;
-        this.settings = new GameSettings();
+        this.levelElements = levelElements;
+        this.settings = gameSettings;
+
         this.board = this.levelGenerator.generateLevel();
         this.CONTEXT_2D = this.initializeBoardAndReturnContext2d();
     }
@@ -15,6 +22,7 @@ export class GameManager {
     private levelGenerator: InMemoryLevelGenerator;
     private board: Array<Array<string>>;
     private CONTEXT_2D: CanvasRenderingContext2D;
+    private levelElements: LevelElements;
 
     public getContext2d() {
         return this.CONTEXT_2D;
@@ -30,16 +38,10 @@ export class GameManager {
         return canvas.getContext("2d");
     }
 
-    public SETTINGS = {
-        GRID_SIZE: 30,
-        GAME_ID: 'game',
-        SIZE: 600
-    };
-
     public ELEMENTS = {
         WALL: 'WW',
         FREE_SPACE: '00',
-        END_POINT: '!!'
+        EXIT: '!!'
     };
 
     public PLAYER_POSITION = {X: 2, Y: 2};
@@ -70,7 +72,7 @@ export class GameManager {
 
                 if (element === this.ELEMENTS.WALL) {
                     context2d.fillStyle = 'black';
-                } else if (element === this.ELEMENTS.END_POINT) {
+                } else if (element === this.ELEMENTS.EXIT) {
                     context2d.fillStyle = 'blue';
                 } else {
                     context2d.fillStyle = 'white';
@@ -88,8 +90,16 @@ export class GameManager {
     };
 
     public drawPlayer(context2d: CanvasRenderingContext2D) {
+        let gridSize = this.settings.getGridSize();
+
         context2d.beginPath();
-        context2d.arc((this.PLAYER_POSITION.X + 1) * this.SETTINGS.GRID_SIZE, (this.PLAYER_POSITION.Y + 1) * this.SETTINGS.GRID_SIZE, this.SETTINGS.GRID_SIZE / 2, 0, 2 * Math.PI);
+        context2d.arc(
+            (this.PLAYER_POSITION.X + 1) * gridSize,
+            (this.PLAYER_POSITION.Y + 1) * gridSize,
+            gridSize / 2,
+            0,
+            2 * Math.PI
+        );
         context2d.fillStyle = 'pink';
         context2d.fill();
     }
@@ -138,12 +148,12 @@ export class GameManager {
 
     public canMoveTo(newPositionY: any, newPositionX: any) {
         return this.board[newPositionY][newPositionX] === this.ELEMENTS.FREE_SPACE ||
-            this.board[newPositionY][newPositionX] === this.ELEMENTS.END_POINT;
+            this.board[newPositionY][newPositionX] === this.ELEMENTS.EXIT;
 
     }
 
     public didWin() {
-        return this.board[this.PLAYER_POSITION.Y][this.PLAYER_POSITION.X] === this.ELEMENTS.END_POINT
+        return this.board[this.PLAYER_POSITION.Y][this.PLAYER_POSITION.X] === this.ELEMENTS.EXIT
     }
 
     public showWinPage() {

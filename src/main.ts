@@ -1,4 +1,7 @@
 import {GameManager} from "./GameManager";
+import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
 
-let gameManager = new GameManager();
+let levelGenerator = new InMemoryLevelGenerator();
+
+let gameManager = new GameManager(levelGenerator);
 gameManager.startGame();

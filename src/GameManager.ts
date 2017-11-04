@@ -1,17 +1,18 @@
-import {LevelGenerator} from "./level/LevelGenerator";
+import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
 import {GameSettings} from "./settings/GameSettings";
+import {LevelGenerator} from "./level/LevelGenerator";
 
 export class GameManager {
 
-    constructor() {
-        this.levelGenerator = new LevelGenerator();
+    constructor(levelGenerator: LevelGenerator) {
+        this.levelGenerator = levelGenerator;
         this.settings = new GameSettings();
         this.board = this.levelGenerator.generateLevel();
         this.CONTEXT_2D = this.initializeBoardAndReturnContext2d();
     }
 
     private settings: GameSettings;
-    private levelGenerator: LevelGenerator;
+    private levelGenerator: InMemoryLevelGenerator;
     private board: Array<Array<string>>;
     private CONTEXT_2D: CanvasRenderingContext2D;
 
@@ -57,8 +58,16 @@ export class GameManager {
     public drawElements(context2d: CanvasRenderingContext2D) {
         this.board.forEach((elements: Array<string>, indexY: number) => {
             elements.forEach((element: string, indexX: number) => {
+                let gridSize = this.settings.getGridSize();
                 context2d.beginPath();
-                context2d.arc((indexX + 1) * this.SETTINGS.GRID_SIZE, (indexY + 1) * this.SETTINGS.GRID_SIZE, this.SETTINGS.GRID_SIZE / 2, 0, 2 * Math.PI);
+                context2d.arc(
+                    (indexX + 1) * gridSize,
+                    (indexY + 1) * gridSize,
+                    gridSize / 2,
+                    0,
+                    2 * Math.PI
+                );
+
                 if (element === this.ELEMENTS.WALL) {
                     context2d.fillStyle = 'black';
                 } else if (element === this.ELEMENTS.END_POINT) {

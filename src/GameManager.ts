@@ -17,17 +17,17 @@ export class GameManager {
         this.player = player;
         this.gameBoard = gameBoard;
 
-        this.board = this.levelGenerator.generateLevel();
+        this.currentLevel = this.levelGenerator.generateLevel();
     }
 
     private levelGenerator: InMemoryLevelGenerator;
-    private board: Array<Array<string>>;
+    private currentLevel: Array<Array<string>>;
     private levelElements: LevelElements;
     private player: Player;
     private gameBoard: GameBoard;
 
     public play() {
-        this.gameBoard.drawBoard(this.board);
+        this.gameBoard.drawLevel(this.currentLevel);
         this.gameBoard.drawPlayer(this.player);
     }
 
@@ -85,13 +85,13 @@ export class GameManager {
     }
 
     public canMoveTo(newPositionY: any, newPositionX: any) {
-        return this.board[newPositionY][newPositionX] === this.levelElements.getFreeSpace() ||
-            this.board[newPositionY][newPositionX] === this.levelElements.getExit();
+        return this.currentLevel[newPositionY][newPositionX] === this.levelElements.getFreeSpace() ||
+            this.currentLevel[newPositionY][newPositionX] === this.levelElements.getExit();
 
     }
 
     public didWin() {
-        return this.board[this.player.getPositionY()][this.player.getPositionX()] ===
+        return this.currentLevel[this.player.getPositionY()][this.player.getPositionX()] ===
             this.levelElements.getExit()
     }
 

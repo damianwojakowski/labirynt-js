@@ -26,12 +26,12 @@ export class GameBoard {
         this.context2d = canvas.getContext("2d");
     }
 
-    public drawBoard(board: Array<Array<string>>) {
-        this.drawElements(board);
+    public drawLevel(level: Array<Array<string>>) {
+        this.drawElements(level);
     }
 
-    public drawElements(board:  Array<Array<string>>) {
-        board.forEach((elements: Array<string>, indexY: number) => {
+    public drawElements(level:  Array<Array<string>>) {
+        level.forEach((elements: Array<string>, indexY: number) => {
             elements.forEach((element: string, indexX: number) => {
                 let gridSize = this.settings.getGridSize();
                 this.context2d.beginPath();

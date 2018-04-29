@@ -1,4 +1,6 @@
-export class InMemoryLevelGenerator {
+import {LevelGenerator} from "./LevelGenerator";
+
+export class InMemoryLevelGenerator implements LevelGenerator {
 
     public generateLevel(): Array<Array<string>> {
         return [

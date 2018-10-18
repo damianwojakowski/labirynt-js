@@ -39,6 +39,10 @@ export class GameManager {
     };
 
     public movePlayer(event: KeyboardEvent) {
+        if (this.didWin()) {
+            return;
+        }
+
         if (event.keyCode === this.KEY_CODES.ARROW_UP) {
             this.tryToMoveUp();
         } else if (event.keyCode === this.KEY_CODES.ARROW_DOWN) {
@@ -85,6 +89,9 @@ export class GameManager {
     }
 
     public canMoveTo(newPositionY: any, newPositionX: any) {
+        if (!(this.currentLevel[[newPositionY]] && this.currentLevel[newPositionY][newPositionX])) {
+            return false;
+        }
         return this.currentLevel[newPositionY][newPositionX] === this.levelElements.getFreeSpace() ||
             this.currentLevel[newPositionY][newPositionX] === this.levelElements.getExit();
 
@@ -101,7 +108,7 @@ export class GameManager {
 
     public startGame() {
         this.gameBoard.initializeBoard();
-        document.addEventListener('keydown', this.movePlayer.bind(this), false);
+        document.addEventListener('keydown', this.movePlayer.bind(this), true);
         this.play();
     }
 

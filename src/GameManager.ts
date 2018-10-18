@@ -20,7 +20,7 @@ export class GameManager {
         this.currentLevel = this.levelGenerator.generateLevel();
     }
 
-    private levelGenerator: InMemoryLevelGenerator;
+    private levelGenerator: LevelGenerator;
     private currentLevel: Array<Array<string>>;
     private levelElements: LevelElements;
     private player: Player;

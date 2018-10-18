@@ -1,6 +1,14 @@
 export class InMemoryLevelGenerator {
 
     public generateLevel(): Array<Array<string>> {
+        return this.getHardcodedLevel();
+    }
+
+    private createLevel(): Array<Array<string>> {
+        return
+    }
+
+    private getHardcodedLevel(): Array<Array<string>> {
         return [
             ['WW', 'SS', 'WW', 'WW', 'WW', 'WW', 'WW'],
             ['WW', '00', '00', 'WW', '00', '00', '!!'],

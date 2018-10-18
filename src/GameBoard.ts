@@ -7,6 +7,9 @@ export class GameBoard {
     private context2d: CanvasRenderingContext2D;
     private settings: GameSettings;
     private levelElements: LevelElements;
+    private playerStartingPositionX: number;
+    private playerStartingPositionY: number;
+    private initializingGame = false;
 
     constructor(
         settings: GameSettings,
@@ -24,6 +27,8 @@ export class GameBoard {
         canvas.style.height = String(this.settings.getLevelSize()); //actual height of canvas
 
         this.context2d = canvas.getContext("2d");
+
+        this.initializingGame = true;
     }
 
     public drawLevel(level: Array<Array<string>>) {
@@ -47,6 +52,10 @@ export class GameBoard {
                     this.context2d.fillStyle = 'black';
                 } else if (element === this.levelElements.getExit()) {
                     this.context2d.fillStyle = 'blue';
+                } else if (element === this.levelElements.getStartingPoint()) {
+                    this.playerStartingPositionX = indexX;
+                    this.playerStartingPositionY = indexY;
+                    this.context2d.fillStyle = 'white';
                 } else {
                     this.context2d.fillStyle = 'white';
                 }
@@ -57,6 +66,12 @@ export class GameBoard {
 
     public drawPlayer(player: Player) {
         let gridSize = this.settings.getGridSize();
+
+        if (this.initializingGame) {
+            player.setPositionX(this.playerStartingPositionX);
+            player.setPositionY(this.playerStartingPositionY);
+            this.initializingGame = false;
+        }
 
         this.context2d.beginPath();
         this.context2d.arc(

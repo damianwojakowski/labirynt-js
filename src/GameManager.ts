@@ -58,7 +58,7 @@ export class GameManager {
 
     public tryToMoveUp() {
         let playerPositionY = this.player.getPositionY();
-        if (this.canMoveTo(playerPositionY- 1, this.player.getPositionX())) {
+        if (this.canMoveTo(playerPositionY - 1, this.player.getPositionX())) {
             this.player.setPositionY(playerPositionY - 1);
         }
     }

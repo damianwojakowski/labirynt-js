@@ -6,7 +6,6 @@ import {Player} from "./Player";
 import {GameBoard} from "./GameBoard";
 
 let player = new Player();
-player.setInitialPosition(2, 2);
 
 let gameBoard = new GameBoard(
     new GameSettings(),

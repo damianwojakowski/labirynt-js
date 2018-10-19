@@ -1,4 +1,3 @@
-import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
 import {LevelGenerator} from "./level/LevelGenerator";
 import {LevelElements} from "./level/LevelElements";
 import {Player} from "./Player";
@@ -88,13 +87,12 @@ export class GameManager {
         }
     }
 
-    public canMoveTo(newPositionY: any, newPositionX: any) {
-        if (!(this.currentLevel[[newPositionY]] && this.currentLevel[newPositionY][newPositionX])) {
+    public canMoveTo(newPositionY: number, newPositionX: number): boolean {
+        if (!(this.currentLevel[newPositionY] && this.currentLevel[newPositionY][newPositionX])) {
             return false;
         }
         return this.currentLevel[newPositionY][newPositionX] === this.levelElements.getFreeSpace() ||
             this.currentLevel[newPositionY][newPositionX] === this.levelElements.getExit();
-
     }
 
     public didWin() {

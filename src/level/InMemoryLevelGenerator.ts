@@ -1,7 +1,7 @@
 export class InMemoryLevelGenerator {
 
-    private base = [];
-    private row = [];
+    private base: Array<Array<string>> = [];
+    private row: Array<string>= [];
 
     public generateLevel(): Array<Array<string>> {
         return this.createLevel();
@@ -36,7 +36,7 @@ export class InMemoryLevelGenerator {
         console.log(this.base);
     }
 
-    private fillMiddleRows(i, j, x, y): void {
+    private fillMiddleRows(i: number, j: number, x: number, y: number): void {
         // first vertical line
         if (i !== 0 && j === 0 && i !== x - 1) {
             this.row.push('WW');

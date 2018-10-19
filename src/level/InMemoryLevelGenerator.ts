@@ -1,16 +1,70 @@
+import {LevelElements} from "./LevelElements";
+
 export class InMemoryLevelGenerator {
 
     private base: Array<Array<string>> = [];
     private row: Array<string>= [];
+    private startPoint: number = null;
+    private endPoint: number = null;
+    private levelElements: LevelElements;
+    private DEFAULT_POSITIONS = 4;
+    private levelSize = 19;
+
+    constructor(levelElements: LevelElements) {
+        this.levelElements = levelElements;
+    }
 
     public generateLevel(): Array<Array<string>> {
         return this.createLevel();
     }
 
     private createLevel(): Array<Array<string>> {
-        this.prepareBase(11, 11);
+        this.resetSettings();
+        this.prepareBase(this.levelSize, this.levelSize);
+        this.setStartingPoint();
+        this.setExitPoint();
 
         return this.base;
+    }
+
+    private resetSettings(): void {
+        this.startPoint = null;
+        this.endPoint = null;
+    }
+
+    private setStartingPoint(): void {
+        this.startPoint = this.getRandomPosition();
+        this.addPointToLevel(this.startPoint, this.levelElements.getStartingPoint());
+    }
+
+    private setExitPoint(): void {
+        this.endPoint =  this.getRandomPosition();
+
+        while (this.startPoint === this.endPoint)  {
+            this.endPoint =  this.getRandomPosition();
+        }
+
+        this.addPointToLevel(this.endPoint, this.levelElements.getExit());
+    }
+
+    private addPointToLevel(pointPosition: number, point: string) {
+        if (pointPosition === 1) {
+            this.base[0][this.getPositionForStartOrExitPoints()] = point;
+        } else if (pointPosition === 2) {
+            this.base[this.getPositionForStartOrExitPoints()][this.levelSize - 1] = point;
+        } else if (pointPosition === 3) {
+            this.base[this.levelSize - 1][this.getPositionForStartOrExitPoints()] = point;
+        } else if (pointPosition === 4) {
+            this.base[this.getPositionForStartOrExitPoints()][0] = point;
+        }
+    }
+
+    private getRandomPosition(): number {
+        return Math.floor((Math.random() * this.DEFAULT_POSITIONS) + 1);
+    }
+
+    private getPositionForStartOrExitPoints(): number {
+        return Math.floor((Math.random() * (this.levelSize - 4)) + 2);
     }
 
     private prepareBase(x: number, y: number): void {

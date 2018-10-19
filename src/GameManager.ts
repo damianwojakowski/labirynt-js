@@ -5,6 +5,12 @@ import {GameBoard} from "./GameBoard";
 
 export class GameManager {
 
+    private levelGenerator: LevelGenerator;
+    private currentLevel: Array<Array<string>>;
+    private levelElements: LevelElements;
+    private player: Player;
+    private gameBoard: GameBoard;
+
     constructor(
         levelGenerator: LevelGenerator,
         levelElements: LevelElements,
@@ -18,12 +24,6 @@ export class GameManager {
 
         this.currentLevel = this.levelGenerator.generateLevel();
     }
-
-    private levelGenerator: LevelGenerator;
-    private currentLevel: Array<Array<string>>;
-    private levelElements: LevelElements;
-    private player: Player;
-    private gameBoard: GameBoard;
 
     public play() {
         this.gameBoard.drawLevel(this.currentLevel);

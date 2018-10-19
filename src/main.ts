@@ -6,6 +6,7 @@ import {Player} from "./Player";
 import {GameBoard} from "./GameBoard";
 
 let player = new Player();
+let levelElements = new LevelElements();
 
 let gameBoard = new GameBoard(
     new GameSettings(),
@@ -13,8 +14,8 @@ let gameBoard = new GameBoard(
 );
 
 let gameManager = new GameManager(
-    new InMemoryLevelGenerator(),
-    new LevelElements(),
+    new InMemoryLevelGenerator(levelElements),
+    levelElements,
     player,
     gameBoard
 );

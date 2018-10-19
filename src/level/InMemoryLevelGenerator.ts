@@ -21,6 +21,7 @@ export class InMemoryLevelGenerator {
     private createLevel(): Array<Array<string>> {
         this.resetSettings();
         this.prepareBase(this.levelSize, this.levelSize);
+        this.addRandomWalls();
         this.setStartingPoint();
         this.setExitPoint();
 
@@ -48,15 +49,47 @@ export class InMemoryLevelGenerator {
     }
 
     private addPointToLevel(pointPosition: number, point: string) {
+        let position = this.getPositionForStartOrExitPoints();
+
         if (pointPosition === 1) {
-            this.base[0][this.getPositionForStartOrExitPoints()] = point;
+            this.base[0][position] = point;
+            this.base[1][position] = this.levelElements.getFreeSpace();
         } else if (pointPosition === 2) {
-            this.base[this.getPositionForStartOrExitPoints()][this.levelSize - 1] = point;
+            this.base[position][this.levelSize - 1] = point;
+            this.base[position][this.levelSize - 2] = this.levelElements.getFreeSpace();
         } else if (pointPosition === 3) {
-            this.base[this.levelSize - 1][this.getPositionForStartOrExitPoints()] = point;
+            this.base[this.levelSize - 1][position] = point;
+            this.base[this.levelSize - 2][position] = this.levelElements.getFreeSpace();
         } else if (pointPosition === 4) {
-            this.base[this.getPositionForStartOrExitPoints()][0] = point;
+            this.base[position][0] = point;
+            this.base[position][1] = this.levelElements.getFreeSpace();
         }
+    }
+
+    private addRandomWalls(): void {
+        for (let i = 1; i < this.levelSize / 2; i++) {
+            let verticalIndex = i * 2 - 1;
+            for (let j = 1; j < this.levelSize / 2; j++) {
+                let horizontalIndex = j * 2;
+                if (this.decideWhetherShouldPutAWall()) {
+                    this.base[verticalIndex][horizontalIndex] = this.levelElements.getWall();
+                }
+            }
+        }
+
+        for (let i = 1; i < this.levelSize / 2 - 2; i++) {
+            let verticalIndex = i * 2;
+            for (let j = 1; j < this.levelSize / 2; j++) {
+                let horizontalIndex = j * 2 - 1;
+                if (this.decideWhetherShouldPutAWall()) {
+                    this.base[verticalIndex][horizontalIndex] = this.levelElements.getWall();
+                }
+            }
+        }
+    }
+
+    private decideWhetherShouldPutAWall(): boolean {
+        return Math.floor((Math.random() * 2)) == 1;
     }
 
     private getRandomPosition(): number {

@@ -9,7 +9,7 @@ export class GameBoard {
     private levelElements: LevelElements;
     private playerStartingPositionX: number;
     private playerStartingPositionY: number;
-    private initializingGame = false;
+    private resetPlayerPosition = false;
 
     constructor(
         settings: GameSettings,
@@ -19,19 +19,25 @@ export class GameBoard {
         this.levelElements = levelElements;
     }
 
-    initializeBoard() {
+    initializeBoard(): void {
+        let levelSize = this.settings.getLevelSize();
         let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById(this.settings.getGameId());
-        canvas.width = this.settings.getLevelSize(); //horizontal resolution (?) - increase for better looking text
-        canvas.height = this.settings.getLevelSize(); //vertical resolution (?) - increase for better looking text
-        canvas.style.width = String(this.settings.getLevelSize()); //actual width of canvas
-        canvas.style.height = String(this.settings.getLevelSize()); //actual height of canvas
+        canvas.width = levelSize; //horizontal resolution (?) - increase for better looking text
+        canvas.height = levelSize; //vertical resolution (?) - increase for better looking text
+        canvas.style.width = String(levelSize); //actual width of canvas
+        canvas.style.height = String(levelSize); //actual height of canvas
 
         this.context2d = canvas.getContext("2d");
 
-        this.initializingGame = true;
+        this.resetPlayerPosition = true;
+    }
+
+    nextLevel(): void {
+        this.resetPlayerPosition = true;
     }
 
     public drawLevel(level: Array<Array<string>>) {
+        this.clear();
         this.drawElements(level);
     }
 
@@ -67,10 +73,10 @@ export class GameBoard {
     public drawPlayer(player: Player) {
         let gridSize = this.settings.getGridSize();
 
-        if (this.initializingGame) {
+        if (this.resetPlayerPosition) {
             player.setPositionX(this.playerStartingPositionX);
             player.setPositionY(this.playerStartingPositionY);
-            this.initializingGame = false;
+            this.resetPlayerPosition = false;
         }
 
         this.context2d.beginPath();
@@ -83,6 +89,44 @@ export class GameBoard {
         );
         this.context2d.fillStyle = 'pink';
         this.context2d.fill();
+    }
+
+    public drawStatistics(levelNumber: number): void {
+        let levelSize = this.settings.getLevelSize();
+        let fillText = 'Level: ' + levelNumber;
+
+        this.context2d.font = '20px Arial';
+        let textWidth = this.context2d.measureText(fillText);
+
+        this.context2d.beginPath();
+        this.context2d.fillStyle = "black";
+        this.context2d.fillRect(23, levelSize - 30, Math.floor(textWidth.width) + 10, 30);
+        this.context2d.fill();
+
+        this.context2d.beginPath();
+        this.context2d.fillStyle = "white";
+        this.context2d.fillText(fillText, 30, levelSize - 5);
+        this.context2d.fill();
+    }
+
+    public drawInfoBox(message: string): void {
+        let levelSize = this.settings.getLevelSize();
+        this.context2d.font = '40px Arial';
+        let textWidth = this.context2d.measureText(message);
+
+        this.context2d.beginPath();
+        this.context2d.fillStyle = "black";
+        this.context2d.fillRect(levelSize / 2 - textWidth.width / 2 - 15, levelSize / 2 - 43, Math.floor(textWidth.width) + 30, 60);
+        this.context2d.fill();
+
+        this.context2d.beginPath();
+        this.context2d.fillStyle = "white";
+        this.context2d.fillText(message, levelSize / 2 - textWidth.width / 2, levelSize / 2, levelSize / 2);
+        this.context2d.fill();
+    }
+
+    private clear(): void {
+        this.context2d.clearRect(0, 0, this.settings.getLevelSize(), this.settings.getLevelSize());
     }
 
 }

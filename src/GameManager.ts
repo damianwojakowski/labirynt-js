@@ -10,6 +10,7 @@ export class GameManager {
     private levelElements: LevelElements;
     private player: Player;
     private gameBoard: GameBoard;
+    private levelNumber: number = 1;
 
     constructor(
         levelGenerator: LevelGenerator,
@@ -21,13 +22,18 @@ export class GameManager {
         this.levelElements = levelElements;
         this.player = player;
         this.gameBoard = gameBoard;
-
         this.currentLevel = this.levelGenerator.generateLevel();
     }
 
     public play() {
         this.gameBoard.drawLevel(this.currentLevel);
+        this.gameBoard.drawStatistics(this.levelNumber);
         this.gameBoard.drawPlayer(this.player);
+    }
+
+    private generateNewLevel(): void {
+        this.gameBoard.nextLevel();
+        this.currentLevel = this.levelGenerator.generateLevel();
     }
 
     public KEY_CODES = {
@@ -38,10 +44,6 @@ export class GameManager {
     };
 
     public movePlayer(event: KeyboardEvent) {
-        if (this.didWin()) {
-            return;
-        }
-
         if (event.keyCode === this.KEY_CODES.ARROW_UP) {
             this.tryToMoveUp();
         } else if (event.keyCode === this.KEY_CODES.ARROW_DOWN) {
@@ -55,7 +57,7 @@ export class GameManager {
         this.play();
 
         if (this.didWin()) {
-            setTimeout(this.showWinPage, 0);
+            setTimeout(() => this.showWinPage(), 0);
         }
     }
 
@@ -87,7 +89,7 @@ export class GameManager {
         }
     }
 
-    public canMoveTo(newPositionY: number, newPositionX: number): boolean {
+    canMoveTo(newPositionY: number, newPositionX: number): boolean {
         if (!(this.currentLevel[newPositionY] && this.currentLevel[newPositionY][newPositionX])) {
             return false;
         }
@@ -102,6 +104,18 @@ export class GameManager {
 
     public showWinPage() {
         alert("YOU FOUND THE EXIT!");
+        this.nextLevel();
+    }
+
+    private nextLevel() {
+        this.levelNumber++;
+        this.generateNewLevel();
+        this.play();
+        this.showInfoMessage("NEW LEVEL");
+    }
+
+    private showInfoMessage(message: string): void {
+        this.gameBoard.drawInfoBox(message);
     }
 
     public startGame() {

@@ -72,12 +72,12 @@ export class InMemoryLevelGenerator {
         for (let i = 0; i < x; i++) {
             for (let j = 0; j < y; j++) {
                 if (this.isFirstRow(i)) {
-                    this.row.push('WW');
+                    this.row.push(this.levelElements.getWall());
                     continue;
                 }
 
                 if (this.isLastRow(i, x - 1)) {
-                    this.row.push('WW');
+                    this.row.push(this.levelElements.getWall());
                     continue;
                 }
 
@@ -93,20 +93,20 @@ export class InMemoryLevelGenerator {
     private fillMiddleRows(i: number, j: number, x: number, y: number): void {
         // first vertical line
         if (i !== 0 && j === 0 && i !== x - 1) {
-            this.row.push('WW');
+            this.row.push(this.levelElements.getWall());
             return;
         }
 
         // last vertical line
         if (i !== 0 && i !== x - 1 && j === y - 1) {
-            this.row.push('WW');
+            this.row.push(this.levelElements.getWall());
             return;
         }
 
         if (!(j % 2) && !(i % 2)) {
-            this.row.push('WW');
+            this.row.push(this.levelElements.getWall());
         } else {
-            this.row.push('OO');
+            this.row.push(this.levelElements.getFreeSpace());
         }
     }
 

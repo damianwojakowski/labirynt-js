@@ -11,6 +11,7 @@ export class GameManager {
     private player: Player;
     private gameBoard: GameBoard;
     private levelNumber: number = 1;
+    private gamePaused: boolean = false;
 
     constructor(
         levelGenerator: LevelGenerator,
@@ -23,12 +24,17 @@ export class GameManager {
         this.player = player;
         this.gameBoard = gameBoard;
         this.currentLevel = this.levelGenerator.generateLevel();
+        this.movePlayer = this.movePlayer.bind(this);
     }
 
     public play() {
         this.gameBoard.drawLevel(this.currentLevel);
         this.gameBoard.drawStatistics(this.levelNumber);
         this.gameBoard.drawPlayer(this.player);
+
+        if (this.gamePaused) {
+            this.showInfoMessage("GAME PAUSED");
+        }
     }
 
     private generateNewLevel(): void {
@@ -40,10 +46,20 @@ export class GameManager {
         ARROW_UP: 38,
         ARROW_DOWN: 40,
         ARROW_LEFT: 37,
-        ARROW_RIGHT: 39
+        ARROW_RIGHT: 39,
+        P_KEY: 80
     };
 
     public movePlayer(event: KeyboardEvent) {
+        if (event.keyCode === this.KEY_CODES.P_KEY) {
+            this.pauseGame();
+        }
+
+        if (this.gamePaused) {
+            this.play();
+            return;
+        }
+
         if (event.keyCode === this.KEY_CODES.ARROW_UP) {
             this.tryToMoveUp();
         } else if (event.keyCode === this.KEY_CODES.ARROW_DOWN) {
@@ -118,9 +134,13 @@ export class GameManager {
         this.gameBoard.drawInfoBox(message);
     }
 
+    public pauseGame() {
+        this.gamePaused = !this.gamePaused;
+    }
+
     public startGame() {
         this.gameBoard.initializeBoard();
-        document.addEventListener('keydown', this.movePlayer.bind(this), true);
+        document.addEventListener('keydown', this.movePlayer, false);
         this.play();
     }
 

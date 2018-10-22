@@ -1,5 +1,5 @@
 import {GameManager} from "./GameManager";
-import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
+import {RandomLevelGenerator} from "./level/RandomLevelGenerator";
 import {LevelElements} from "./level/LevelElements";
 import {GameSettings} from "./settings/GameSettings";
 import {Player} from "./Player";
@@ -14,7 +14,7 @@ let gameBoard = new GameBoard(
 );
 
 let gameManager = new GameManager(
-    new InMemoryLevelGenerator(levelElements),
+    new RandomLevelGenerator(levelElements),
     levelElements,
     player,
     gameBoard

@@ -62,6 +62,8 @@ export class GameBoard {
                     this.playerStartingPositionX = indexX;
                     this.playerStartingPositionY = indexY;
                     this.context2d.fillStyle = 'white';
+                } else if (element == this.levelElements.getWallOrPassage()) {
+                    this.context2d.fillStyle = 'purple';
                 } else {
                     this.context2d.fillStyle = 'white';
                 }

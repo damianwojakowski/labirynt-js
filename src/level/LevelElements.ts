@@ -1,7 +1,8 @@
 export class LevelElements {
 
     private WALL = 'WW';
-    private FREE_SPACE = '00';
+    private WALL_OR_PASSAGE = 'WP';
+    private FREE_SPACE = 'PP';
     private EXIT = '!!';
     private STARTING_POINT = 'SS';
 
@@ -19,6 +20,10 @@ export class LevelElements {
 
     public getStartingPoint(): string {
         return this.STARTING_POINT;
+    }
+
+    public getWallOrPassage(): string {
+        return this.WALL_OR_PASSAGE;
     }
 
 }

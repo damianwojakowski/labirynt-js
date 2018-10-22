@@ -4,6 +4,8 @@ export class RandomLevelGenerator {
 
     private base: Array<Array<string>> = [];
     private levelElements: LevelElements;
+    private levelWidth = 11;
+    private levelHeight = 11;
 
     private walls = [
         ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
@@ -40,6 +42,14 @@ export class RandomLevelGenerator {
     }
 
     private fillLevelWithWalls(): void {
+        this.addFirstRow();
+    }
 
+    private addFirstRow() {
+        let emptyRow: Array<string> = [];
+        for (let i = 0; i < this.levelWidth; i++) {
+            emptyRow.push('WW');
+        }
+        this.base.push(emptyRow);
     }
 }

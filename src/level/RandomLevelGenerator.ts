@@ -28,7 +28,15 @@ export class RandomLevelGenerator {
         //     Remove the wall from the list.
         this.drawMaze();
 
+        this.setPlayerPosition();
+
+        console.log(this.base);
+
         return this.base;
+    }
+
+    private setPlayerPosition(): void {
+        this.base[this.startingPoint.x][this.startingPoint.y] = this.levelElements.getStartingPoint();
     }
 
     private fillLevelWithWalls(): void {
@@ -116,7 +124,7 @@ export class RandomLevelGenerator {
     }
 
         private addWallsForCell(cell: {x: number, y: number}): void {
-            this.base[cell.x][cell.y] = this.levelElements.getFreeSpaceVisited();
+            this.base[cell.x][cell.y] = this.levelElements.getMazeCell();
             let element;
 
             // check if wall in north and add to walls list
@@ -145,7 +153,7 @@ export class RandomLevelGenerator {
         }
 
         private getFreeSpaceVisited(): string {
-            return this.levelElements.getFreeSpaceVisited();
+            return this.levelElements.getMazeCell();
         }
 
         private isWallOrPassage(element: string): boolean {

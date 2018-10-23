@@ -5,7 +5,7 @@ export class LevelElements {
     private HORIZONTAL_PASSAGE = 'HP';
     private VERTICAL_PASSAGE = 'VP';
     private FREE_SPACE = 'PP';
-    private FREE_SPACE_VISITED = '00';
+    private MAZE_CELL = '00';
     private EXIT = '!!';
     private STARTING_POINT = 'SS';
 
@@ -29,8 +29,8 @@ export class LevelElements {
         return this.WALL_OR_PASSAGE;
     }
 
-    public getFreeSpaceVisited(): string {
-        return this.FREE_SPACE_VISITED;
+    public getMazeCell(): string {
+        return this.MAZE_CELL;
     }
 
     public getHorizontalPassage(): string {

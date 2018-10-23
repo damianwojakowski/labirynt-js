@@ -109,7 +109,7 @@ export class GameManager {
         if (!(this.currentLevel[newPositionY] && this.currentLevel[newPositionY][newPositionX])) {
             return false;
         }
-        return this.currentLevel[newPositionY][newPositionX] === this.levelElements.getFreeSpace() ||
+        return this.currentLevel[newPositionY][newPositionX] === this.levelElements.getMazeCell() ||
             this.currentLevel[newPositionY][newPositionX] === this.levelElements.getExit();
     }
 

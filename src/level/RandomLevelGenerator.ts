@@ -6,7 +6,7 @@ export class RandomLevelGenerator {
     private levelElements: LevelElements;
     private levelWidth = 19;
     private levelHeight = 19;
-    private startingPoint = {x: 2, y: 2};
+    private startingPoint = {x: 8, y: 8};
 
     private walls: Array<Wall> = [];
 
@@ -33,6 +33,7 @@ export class RandomLevelGenerator {
         //         Add the neighboring walls of the cell to the wall list.
         //     Remove the wall from the list.
         this.drawMaze();
+
 
         console.log(this.base);
         return this.base;
@@ -85,7 +86,7 @@ export class RandomLevelGenerator {
         private addOneRow(nextRow: Array<string>) {
             for (let i = 0; i < this.levelWidth - 2; i++) {
                 if (i % 2) {
-                    nextRow.push(this.getEmptyCell());
+                    nextRow.push(this.getFreeSpace());
                 } else {
                     nextRow.push(this.getHorizontalPassage());
                 }
@@ -106,7 +107,7 @@ export class RandomLevelGenerator {
             return this.levelElements.getWall();
         }
 
-        private getEmptyCell(): string {
+        private getFreeSpace(): string {
             return this.levelElements.getFreeSpace();
         }
 
@@ -152,6 +153,10 @@ export class RandomLevelGenerator {
             }
         }
 
+        private getFreeSpaceVisited(): string {
+            return this.levelElements.getFreeSpaceVisited();
+        }
+
         private isWallOrPassage(element: string): boolean {
             return element === this.levelElements.getVerticalPassage() || element === this.levelElements.getHorizontalPassage();
         }
@@ -168,28 +173,124 @@ export class RandomLevelGenerator {
         while (this.walls.length > 0 && iterations < infiniteLoopCounter) {
             iterations++;
             // Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
-            let randomWall = this.getRandomWall();
+            let randomWallIndex = this.getRandomWallIndex();
+            let randomWall = this.walls[randomWallIndex];
             if (this.isOneCellVisitedOfTwoDividedByWall(randomWall)) {
-                // Make the wall a passage and mark the unvisited cell as part of the maze.
+                // Make the wall a passage
+                this.base[randomWall.positionX][randomWall.positionY] = this.getFreeSpaceVisited();
+
+                // and mark the unvisited cell as part of the maze.
                 // Add the neighboring walls of the cell to the wall list.
+                this.addUnvisitedCellToMazeAndItsWallsToWallsList(randomWall);
             } else {
-                // Remove the wall from the list.
+                this.base[randomWall.positionX][randomWall.positionY] = this.getWall();
             }
+            this.walls.splice(randomWallIndex, 1);
         }
     }
 
-        private getRandomWall(): Wall {
-            let randomNumber = Math.floor(Math.random() * this.walls.length);
-            //console.log('randomNumber: ' + randomNumber);
-            return this.walls[randomNumber];
+        private getRandomWallIndex(): number {
+            return Math.floor(Math.random() * this.walls.length);
         }
 
         private isOneCellVisitedOfTwoDividedByWall(wall: Wall): boolean {
-            if (wall.element === this.levelElements.getHorizontalPassage()) {
-                return true;
-            } else if (wall.element === this.levelElements.getHorizontalPassage()) {
-                return false
+            let isVisitedCounter = 0;
+            if (this.isHorizontalPassage(wall)) {
+                if (this.isLeftCellVisited(wall)) {
+                    isVisitedCounter++;
+                }
+                if (this.isRightCellVisited(wall)) {
+                    isVisitedCounter++;
+                }
+            } else if (this.isVerticalPassage(wall)) {
+                if (this.isUpCellVisited(wall)) {
+                    isVisitedCounter++;
+                }
+                if (this.isDownCellVisited(wall)) {
+                    isVisitedCounter++;
+                }
             }
+
+            return isVisitedCounter === 1;
+        }
+
+        private isHorizontalPassage(wall: Wall): boolean {
+            return wall.element === this.levelElements.getHorizontalPassage();
+        }
+
+        private isVerticalPassage(wall: Wall): boolean {
+            return wall.element === this.levelElements.getVerticalPassage();
+        }
+
+        private isLeftCellVisited(wall: Wall): boolean {
+            return this.getLeftCell(wall) === this.getFreeSpaceVisited();
+        }
+
+        private getLeftCell(wall: Wall): string {
+            return this.base[wall.positionX][wall.positionY - 1];
+        }
+
+        private isRightCellVisited(wall: Wall): boolean {
+            return this.getRightCell(wall) === this.getFreeSpaceVisited();
+        }
+
+        private getRightCell(wall: Wall): string {
+            return this.base[wall.positionX][wall.positionY + 1];
+        }
+
+        private isUpCellVisited(wall: Wall): boolean {
+            return this.getUpCell(wall) === this.getFreeSpaceVisited();
+        }
+
+        private getUpCell(wall: Wall): string {
+            return this.base[wall.positionX - 1] && this.base[wall.positionX - 1][wall.positionY]
+        }
+
+        private isDownCellVisited(wall: Wall): boolean {
+            return this.getDownCell(wall) === this.getFreeSpaceVisited();
+        }
+
+        private getDownCell(wall: Wall): string {
+            return this.base[wall.positionX + 1] && this.base[wall.positionX + 1][wall.positionY];
+        }
+
+        private addUnvisitedCellToMazeAndItsWallsToWallsList(wall: Wall): void {
+            let notVisitedCell = this.getNotVisitedCell(wall);
+
+            if (notVisitedCell.x === null) return;
+
+            // add walls of unvisited to walls list
+            this.addWallsForCell(notVisitedCell);
+
+            this.base[notVisitedCell.x][notVisitedCell.x] = this.getFreeSpaceVisited();
+        }
+
+        private getNotVisitedCell(wall: Wall): {x: number, y: number} {
+            let notVisitedCellPosition = {x: null, y: null};
+
+            if (this.isHorizontalPassage(wall)) {
+                if (this.getLeftCell(wall) === this.getFreeSpace()) {
+                    notVisitedCellPosition.x = wall.positionX;
+                    notVisitedCellPosition.y = wall.positionY - 1;
+                }
+                else if (this.getRightCell(wall) === this.getFreeSpace()) {
+                    notVisitedCellPosition.x = wall.positionX;
+                    notVisitedCellPosition.y = wall.positionY + 1;
+                }
+            } else if (this.isVerticalPassage(wall)) {
+                if (this.getUpCell(wall) === this.getFreeSpace()) {
+                    notVisitedCellPosition.x = wall.positionX - 1;
+                    notVisitedCellPosition.y = wall.positionY;
+                }
+                if (this.getDownCell(wall) === this.getFreeSpace()) {
+                    notVisitedCellPosition.x = wall.positionX + 1;
+                    notVisitedCellPosition.y = wall.positionY;
+                }
+            }
+
+            console.log('notVisitedCellPosition', notVisitedCellPosition);
+
+            return notVisitedCellPosition;
         }
 }
 

@@ -58,11 +58,13 @@ export class GameBoard {
                     this.context2d.fillStyle = 'black';
                 } else if (element === this.levelElements.getExit()) {
                     this.context2d.fillStyle = 'blue';
+                } else if (element === this.levelElements.getFreeSpace()) {
+                    this.context2d.fillStyle = 'green';
                 } else if (element === this.levelElements.getStartingPoint()) {
                     this.playerStartingPositionX = indexX;
                     this.playerStartingPositionY = indexY;
                     this.context2d.fillStyle = 'white';
-                } else if (element == this.levelElements.getWallOrPassage()) {
+                } else if (element === this.levelElements.getWallOrPassage()) {
                     this.context2d.fillStyle = 'purple';
                 } else {
                     this.context2d.fillStyle = 'white';

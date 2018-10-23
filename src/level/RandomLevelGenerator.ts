@@ -4,9 +4,9 @@ export class RandomLevelGenerator {
 
     private base: Array<Array<string>> = [];
     private levelElements: LevelElements;
-    private levelWidth = 36;
-    private levelHeight = 36;
-    private startingPoint = {x: 2, y: 2};
+    private levelWidth = 35;
+    private levelHeight = 35;
+    private startingPoint = {x: 2, y: 10};
 
     private walls: Array<Wall> = [];
 
@@ -126,13 +126,13 @@ export class RandomLevelGenerator {
             let element;
 
             // check if wall in north and add to walls list
-            element = this.base[cell.x - 1] && this.base[cell.x - 1][cell.y];
+            element = this.base[cell.x - 1] ? this.base[cell.x - 1][cell.y] : '';
             if (this.isWallOrPassage(element)) {
                 this.walls.push(this.buildWall(element, cell.x - 1, cell.y));
             }
 
             // check if wall in south
-            element = this.base[cell.x + 1] && this.base[cell.x + 1][cell.y];
+            element = this.base[cell.x + 1] ? this.base[cell.x + 1][cell.y] : '';
             if (this.isWallOrPassage(element)) {
                 this.walls.push(this.buildWall(element, cell.x + 1, cell.y));
             }
@@ -240,7 +240,7 @@ export class RandomLevelGenerator {
         }
 
         private getUpCell(wall: Wall): string {
-            return this.base[wall.positionX - 1] && this.base[wall.positionX - 1][wall.positionY]
+            return this.base[wall.positionX - 1] ? this.base[wall.positionX - 1][wall.positionY] : '';
         }
 
         private isDownCellVisited(wall: Wall): boolean {
@@ -248,7 +248,7 @@ export class RandomLevelGenerator {
         }
 
         private getDownCell(wall: Wall): string {
-            return this.base[wall.positionX + 1] && this.base[wall.positionX + 1][wall.positionY];
+            return this.base[wall.positionX + 1] ? this.base[wall.positionX + 1][wall.positionY] : '';
         }
 
         private addUnvisitedCellToMazeAndItsWallsToWallsList(wall: Wall): void {
@@ -259,7 +259,7 @@ export class RandomLevelGenerator {
             // add walls of unvisited to walls list
             this.addWallsForCell(notVisitedCell);
 
-            this.base[notVisitedCell.x][notVisitedCell.x] = this.getFreeSpaceVisited();
+            this.base[notVisitedCell.x][notVisitedCell.y] = this.getFreeSpaceVisited();
         }
 
         private getNotVisitedCell(wall: Wall): {x: number, y: number} {

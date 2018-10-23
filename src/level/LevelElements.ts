@@ -2,6 +2,8 @@ export class LevelElements {
 
     private WALL = 'WW';
     private WALL_OR_PASSAGE = 'WP';
+    private HORIZONTAL_PASSAGE = 'HP';
+    private VERTICAL_PASSAGE = 'VP';
     private FREE_SPACE = 'PP';
     private FREE_SPACE_VISITED = '00';
     private EXIT = '!!';
@@ -29,6 +31,14 @@ export class LevelElements {
 
     public getFreeSpaceVisited(): string {
         return this.FREE_SPACE_VISITED;
+    }
+
+    public getHorizontalPassage(): string {
+        return this.HORIZONTAL_PASSAGE;
+    }
+
+    public getVerticalPassage(): string {
+        return this.VERTICAL_PASSAGE;
     }
 
 }

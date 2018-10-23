@@ -6,17 +6,9 @@ export class RandomLevelGenerator {
     private levelElements: LevelElements;
     private levelWidth = 19;
     private levelHeight = 19;
+    private startingPoint = {x: 2, y: 2};
 
-    private walls = [
-        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
-        ['WW', 'WW', 'WW', '00', 'WW', '00', 'WW'],
-        ['WW', '00', 'WW', 'WW', 'WW', 'WW', 'WW'],
-        ['WW', 'WW', 'WW', '00', 'WW', '00', 'WW'],
-        ['WW', '00', 'WW', 'WW', 'WW', 'WW', 'WW'],
-        ['WW', 'WW', 'WW', '00', 'WW', '00', 'WW'],
-        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW'],
-        ['WW', 'WW', 'WW', 'WW', 'WW', 'WW', 'WW']
-    ];
+    private walls: Array<{}> = [];
 
     //    W P W P W
     //    P C P C P
@@ -33,6 +25,8 @@ export class RandomLevelGenerator {
         this.fillLevelWithWalls();
 
         // Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
+        this.pickStartingPointAndAddFirstWalls();
+
         // While there are walls in the list:
         //     Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
         //         Make the wall a passage and mark the unvisited cell as part of the maze.
@@ -47,6 +41,16 @@ export class RandomLevelGenerator {
         this.addEmptyRow();
         this.addMiddleRows();
         this.addEmptyRow();
+
+        //this.prepareListOfWalls();
+    }
+
+    private pickStartingPointAndAddFirstWalls(): void {
+        this.addWallsForCell(this.startingPoint);
+    }
+
+    private addWallsForCell(cell: {x: number, y: number}): void {
+
     }
 
     private addEmptyRow(): void {
@@ -64,7 +68,6 @@ export class RandomLevelGenerator {
             } else {
                 this.addSingleRawWithPassages();
             }
-
         }
     }
 
@@ -118,5 +121,27 @@ export class RandomLevelGenerator {
 
     private getWallOrPassage(): string {
         return this.levelElements.getWallOrPassage();
+    }
+
+    private buildElement(item: string, positionX: number, positionY: number) {
+        return {
+            item: item,
+            positionX: positionX,
+            positionY: positionY,
+            isVisited: false
+        }
+    }
+
+    private prepareListOfWalls(): void {
+        for (let i = 0; i < this.levelHeight - 1; i++) {
+            for (let j = 0; j < this.levelWidth - 1; j++) {
+                if (this.base[i][j] == this.levelElements.getWallOrPassage()) {
+                    this.walls.push(this.buildElement(this.base[i][j], i, j));
+                }
+            }
+        }
+
+        console.log("WALLS: ");
+        console.log(this.walls);
     }
 }

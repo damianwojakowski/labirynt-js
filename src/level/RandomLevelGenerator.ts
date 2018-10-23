@@ -6,15 +6,9 @@ export class RandomLevelGenerator {
     private levelElements: LevelElements;
     private levelWidth = 35;
     private levelHeight = 35;
-    private startingPoint = {x: 2, y: 10};
+    private startingPoint = {x: 1, y: 11};
 
     private walls: Array<Wall> = [];
-
-    //    W P W P W
-    //    P C P C P
-    //    W P W P W
-    //    P C P C P
-    //    W P W P W
 
     constructor(levelElements: LevelElements) {
         this.levelElements = levelElements;
@@ -54,9 +48,9 @@ export class RandomLevelGenerator {
         private addMiddleRows(): void {
             for (let i = 0; i < this.levelHeight - 2; i++) {
                 if (i % 2) {
-                    this.addSingleRow();
-                } else {
                     this.addSingleRawWithPassages();
+                } else {
+                    this.addSingleRow();
                 }
             }
         }
@@ -84,9 +78,9 @@ export class RandomLevelGenerator {
         private addOneRow(nextRow: Array<string>) {
             for (let i = 0; i < this.levelWidth - 2; i++) {
                 if (i % 2) {
-                    nextRow.push(this.getFreeSpace());
-                } else {
                     nextRow.push(this.getHorizontalPassage());
+                } else {
+                    nextRow.push(this.getFreeSpace());
                 }
             }
         }
@@ -94,9 +88,9 @@ export class RandomLevelGenerator {
         private addOneRowWithPassages(nextRow: Array<string>): void {
             for (let i = 0; i < this.levelWidth - 2; i++) {
                 if (i % 2) {
-                    nextRow.push(this.getVerticalPassage());
-                } else {
                     nextRow.push(this.getWall());
+                } else {
+                    nextRow.push(this.getVerticalPassage());
                 }
             }
         }

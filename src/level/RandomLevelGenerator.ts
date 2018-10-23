@@ -4,9 +4,9 @@ export class RandomLevelGenerator {
 
     private base: Array<Array<string>> = [];
     private levelElements: LevelElements;
-    private levelWidth = 19;
-    private levelHeight = 19;
-    private startingPoint = {x: 8, y: 8};
+    private levelWidth = 36;
+    private levelHeight = 36;
+    private startingPoint = {x: 2, y: 2};
 
     private walls: Array<Wall> = [];
 
@@ -34,8 +34,6 @@ export class RandomLevelGenerator {
         //     Remove the wall from the list.
         this.drawMaze();
 
-
-        console.log(this.base);
         return this.base;
     }
 
@@ -121,7 +119,6 @@ export class RandomLevelGenerator {
 
     private pickStartingPointAndAddFirstWalls(): void {
         this.addWallsForCell(this.startingPoint);
-        console.log(this.walls);
     }
 
         private addWallsForCell(cell: {x: number, y: number}): void {
@@ -287,8 +284,6 @@ export class RandomLevelGenerator {
                     notVisitedCellPosition.y = wall.positionY;
                 }
             }
-
-            console.log('notVisitedCellPosition', notVisitedCellPosition);
 
             return notVisitedCellPosition;
         }

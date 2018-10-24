@@ -2,7 +2,7 @@ import {LevelElements} from "./LevelElements";
 
 export class RandomLevelGenerator {
 
-    private base: Array<Array<string>> = [];
+    private base: Array<Array<number>> = [];
     private levelElements: LevelElements;
     private levelWidth = 60;
     private levelHeight = 60;
@@ -14,7 +14,7 @@ export class RandomLevelGenerator {
         this.levelElements = levelElements;
     }
 
-    public generateLevel(): Array<Array<string>> {
+    public generateLevel(): Array<Array<number>> {
         // Start with a grid full of walls.
         this.fillLevelWithWalls();
 
@@ -45,7 +45,7 @@ export class RandomLevelGenerator {
     }
 
         private addEmptyRow(): void {
-            let emptyRow: Array<string> = [];
+            let emptyRow: Array<number> = [];
             for (let i = 0; i < this.levelWidth; i++) {
                 emptyRow.push(this.getWall());
             }
@@ -63,7 +63,7 @@ export class RandomLevelGenerator {
         }
 
         private addSingleRow(): void {
-            let nextRow: Array<string> = [];
+            let nextRow: Array<number> = [];
             nextRow.push(this.getWall());
 
             this.addOneRow(nextRow);
@@ -73,7 +73,7 @@ export class RandomLevelGenerator {
         }
 
         private addSingleRawWithPassages(): void {
-            let nextRow: Array<string> = [];
+            let nextRow: Array<number> = [];
             nextRow.push(this.getWall());
 
             this.addOneRowWithPassages(nextRow);
@@ -82,7 +82,7 @@ export class RandomLevelGenerator {
             this.base.push(nextRow);
         }
 
-        private addOneRow(nextRow: Array<string>) {
+        private addOneRow(nextRow: Array<number>) {
             for (let i = 0; i < this.levelWidth - 2; i++) {
                 if (i % 2) {
                     nextRow.push(this.getHorizontalPassage());
@@ -92,7 +92,7 @@ export class RandomLevelGenerator {
             }
         }
 
-        private addOneRowWithPassages(nextRow: Array<string>): void {
+        private addOneRowWithPassages(nextRow: Array<number>): void {
             for (let i = 0; i < this.levelWidth - 2; i++) {
                 if (i % 2) {
                     nextRow.push(this.getWall());
@@ -102,19 +102,19 @@ export class RandomLevelGenerator {
             }
         }
 
-        private getWall(): string {
+        private getWall(): number {
             return this.levelElements.getWall();
         }
 
-        private getFreeSpace(): string {
+        private getFreeSpace(): number {
             return this.levelElements.getFreeSpace();
         }
 
-        private getHorizontalPassage(): string {
+        private getHorizontalPassage(): number {
             return this.levelElements.getHorizontalPassage();
         }
 
-        private getVerticalPassage(): string {
+        private getVerticalPassage(): number {
             return this.levelElements.getVerticalPassage();
         }
 
@@ -151,15 +151,15 @@ export class RandomLevelGenerator {
             }
         }
 
-        private getFreeSpaceVisited(): string {
+        private getFreeSpaceVisited(): number {
             return this.levelElements.getMazeCell();
         }
 
-        private isWallOrPassage(element: string): boolean {
+        private isWallOrPassage(element: number): boolean {
             return element === this.levelElements.getVerticalPassage() || element === this.levelElements.getHorizontalPassage();
         }
 
-        private buildWall(element: string, positionX: number, positionY: number): Wall {
+        private buildWall(element: number, positionX: number, positionY: number): Wall {
             return new Wall(element, positionX, positionY);
         }
 
@@ -228,7 +228,7 @@ export class RandomLevelGenerator {
             return this.getLeftCell(wall) === this.getFreeSpaceVisited();
         }
 
-        private getLeftCell(wall: Wall): string {
+        private getLeftCell(wall: Wall): number {
             return this.base[wall.positionX][wall.positionY - 1];
         }
 
@@ -236,7 +236,7 @@ export class RandomLevelGenerator {
             return this.getRightCell(wall) === this.getFreeSpaceVisited();
         }
 
-        private getRightCell(wall: Wall): string {
+        private getRightCell(wall: Wall): number {
             return this.base[wall.positionX][wall.positionY + 1];
         }
 
@@ -244,16 +244,16 @@ export class RandomLevelGenerator {
             return this.getUpCell(wall) === this.getFreeSpaceVisited();
         }
 
-        private getUpCell(wall: Wall): string {
-            return this.base[wall.positionX - 1] ? this.base[wall.positionX - 1][wall.positionY] : '';
+        private getUpCell(wall: Wall): number {
+            return this.base[wall.positionX - 1] ? this.base[wall.positionX - 1][wall.positionY] : 0;
         }
 
         private isDownCellVisited(wall: Wall): boolean {
             return this.getDownCell(wall) === this.getFreeSpaceVisited();
         }
 
-        private getDownCell(wall: Wall): string {
-            return this.base[wall.positionX + 1] ? this.base[wall.positionX + 1][wall.positionY] : '';
+        private getDownCell(wall: Wall): number {
+            return this.base[wall.positionX + 1] ? this.base[wall.positionX + 1][wall.positionY] : 0;
         }
 
         private addUnvisitedCellToMazeAndItsWallsToWallsList(wall: Wall): void {
@@ -297,9 +297,9 @@ export class RandomLevelGenerator {
 class Wall {
     public positionX: number;
     public positionY: number;
-    public element: string;
+    public element: number;
 
-    constructor(element: string, positionX: number, positionY: number) {
+    constructor(element: number, positionX: number, positionY: number) {
         this.element = element;
         this.positionX = positionX;
         this.positionY = positionY

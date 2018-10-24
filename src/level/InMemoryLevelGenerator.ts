@@ -2,8 +2,8 @@ import {LevelElements} from "./LevelElements";
 
 export class InMemoryLevelGenerator {
 
-    private base: Array<Array<string>> = [];
-    private row: Array<string>= [];
+    private base: Array<Array<number>> = [];
+    private row: Array<number>= [];
     private startPoint: number = null;
     private endPoint: number = null;
     private levelElements: LevelElements;
@@ -14,11 +14,11 @@ export class InMemoryLevelGenerator {
         this.levelElements = levelElements;
     }
 
-    public generateLevel(): Array<Array<string>> {
+    public generateLevel(): Array<Array<number>> {
         return this.createLevel();
     }
 
-    private createLevel(): Array<Array<string>> {
+    private createLevel(): Array<Array<number>> {
         this.resetSettings();
         this.prepareBase(this.levelSize, this.levelSize);
         this.addRandomWalls();
@@ -48,7 +48,7 @@ export class InMemoryLevelGenerator {
         this.addPointToLevel(this.endPoint, this.levelElements.getExit());
     }
 
-    private addPointToLevel(pointPosition: number, point: string) {
+    private addPointToLevel(pointPosition: number, point: number) {
         let position = this.getPositionForStartOrExitPoints();
 
         if (pointPosition === 1) {

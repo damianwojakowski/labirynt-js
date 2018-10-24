@@ -1,43 +1,43 @@
 export class LevelElements {
 
-    private WALL = 'WW';
-    private WALL_OR_PASSAGE = 'WP';
-    private HORIZONTAL_PASSAGE = 'HP';
-    private VERTICAL_PASSAGE = 'VP';
-    private FREE_SPACE = 'PP';
-    private MAZE_CELL = '00';
-    private EXIT = '!!';
-    private STARTING_POINT = 'SS';
+    private WALL = 1;
+    private WALL_OR_PASSAGE = 2;
+    private HORIZONTAL_PASSAGE = 3;
+    private VERTICAL_PASSAGE = 4;
+    private FREE_SPACE = 5;
+    private EXIT = 6;
+    private STARTING_POINT = 7;
+    private MAZE_CELL = 8;
 
-    public getWall(): string {
+    public getWall(): number {
         return this.WALL;
     }
 
-    public getFreeSpace(): string {
+    public getFreeSpace(): number {
         return this.FREE_SPACE;
     }
 
-    public getExit(): string {
+    public getExit(): number {
         return this.EXIT;
     }
 
-    public getStartingPoint(): string {
+    public getStartingPoint(): number {
         return this.STARTING_POINT;
     }
 
-    public getWallOrPassage(): string {
+    public getWallOrPassage(): number {
         return this.WALL_OR_PASSAGE;
     }
 
-    public getMazeCell(): string {
+    public getMazeCell(): number {
         return this.MAZE_CELL;
     }
 
-    public getHorizontalPassage(): string {
+    public getHorizontalPassage(): number {
         return this.HORIZONTAL_PASSAGE;
     }
 
-    public getVerticalPassage(): string {
+    public getVerticalPassage(): number {
         return this.VERTICAL_PASSAGE;
     }
 

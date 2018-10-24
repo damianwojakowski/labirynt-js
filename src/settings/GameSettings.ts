@@ -1,8 +1,8 @@
 export class GameSettings {
 
-    private GRID_SIZE = 15;
+    private GRID_SIZE = 8;
     private GAME_ID = 'game';
-    private LEVEL_SIZE = 600;
+    private LEVEL_SIZE = 500;
 
     public getGridSize(): number {
         return this.GRID_SIZE;

@@ -4,8 +4,8 @@ export class RandomLevelGenerator {
 
     private base: Array<Array<string>> = [];
     private levelElements: LevelElements;
-    private levelWidth = 35;
-    private levelHeight = 35;
+    private levelWidth = 60;
+    private levelHeight = 60;
     private startingPoint = {x: 1, y: 11};
 
     private walls: Array<Wall> = [];
@@ -30,16 +30,15 @@ export class RandomLevelGenerator {
 
         this.setPlayerPosition();
 
-        console.log(this.base);
-
         return this.base;
     }
 
     private setPlayerPosition(): void {
-        this.base[this.startingPoint.x][this.startingPoint.y] = this.levelElements.getStartingPoint();
+        this.base[this.startingPoint.x - 1][this.startingPoint.y] = this.levelElements.getStartingPoint();
     }
 
     private fillLevelWithWalls(): void {
+        this.base = [];
         this.addEmptyRow();
         this.addMiddleRows();
         this.addEmptyRow();
@@ -185,6 +184,10 @@ export class RandomLevelGenerator {
                 this.base[randomWall.positionX][randomWall.positionY] = this.getWall();
             }
             this.walls.splice(randomWallIndex, 1);
+
+            if (this.walls.length === 0) {
+                this.base[randomWall.positionX][randomWall.positionY] = this.levelElements.getExit();
+            }
         }
     }
 

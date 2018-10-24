@@ -12,6 +12,7 @@ export class GameManager {
     private gameBoard: GameBoard;
     private levelNumber: number = 1;
     private gamePaused: boolean = false;
+    private keyReleased = true;
 
     constructor(
         levelGenerator: LevelGenerator,
@@ -24,6 +25,7 @@ export class GameManager {
         this.player = player;
         this.gameBoard = gameBoard;
         this.currentLevel = this.levelGenerator.generateLevel();
+        this.movePlayer = this.movePlayer.bind(this);
         this.movePlayer = this.movePlayer.bind(this);
     }
 
@@ -51,6 +53,12 @@ export class GameManager {
     };
 
     public movePlayer(event: KeyboardEvent) {
+        if (!this.keyReleased) {
+            return;
+        }
+
+        this.keyReleased = false;
+
         if (event.keyCode === this.KEY_CODES.P_KEY) {
             this.pauseGame();
         }
@@ -138,9 +146,14 @@ export class GameManager {
         this.gamePaused = !this.gamePaused;
     }
 
+    private keepKeyPressedOnce(): void {
+        this.keyReleased = true;
+    }
+
     public startGame() {
         this.gameBoard.initializeBoard();
         document.addEventListener('keydown', this.movePlayer, false);
+        document.addEventListener('keyup', this.keepKeyPressedOnce.bind(this), false);
         this.play();
     }
 

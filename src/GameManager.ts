@@ -1,100 +1,73 @@
-import {InMemoryLevelGenerator} from "./level/InMemoryLevelGenerator";
-import {GameSettings} from "./settings/GameSettings";
 import {LevelGenerator} from "./level/LevelGenerator";
+import {LevelElements} from "./level/LevelElements";
+import {Player} from "./Player";
+import {GameBoard} from "./GameBoard";
 
 export class GameManager {
 
-    constructor(levelGenerator: LevelGenerator) {
+    private levelGenerator: LevelGenerator;
+    private currentLevel: Array<Array<string>>;
+    private levelElements: LevelElements;
+    private player: Player;
+    private gameBoard: GameBoard;
+    private levelNumber: number = 1;
+    private gamePaused: boolean = false;
+    private keyReleased = true;
+
+    constructor(
+        levelGenerator: LevelGenerator,
+        levelElements: LevelElements,
+        player: Player,
+        gameBoard: GameBoard
+    ) {
         this.levelGenerator = levelGenerator;
-        this.settings = new GameSettings();
-        this.board = this.levelGenerator.generateLevel();
-        this.CONTEXT_2D = this.initializeBoardAndReturnContext2d();
+        this.levelElements = levelElements;
+        this.player = player;
+        this.gameBoard = gameBoard;
+        this.currentLevel = this.levelGenerator.generateLevel();
+        this.movePlayer = this.movePlayer.bind(this);
+        this.movePlayer = this.movePlayer.bind(this);
     }
-
-    private settings: GameSettings;
-    private levelGenerator: InMemoryLevelGenerator;
-    private board: Array<Array<string>>;
-    private CONTEXT_2D: CanvasRenderingContext2D;
-
-    public getContext2d() {
-        return this.CONTEXT_2D;
-    }
-
-    initializeBoardAndReturnContext2d() {
-        let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById(this.settings.getGameId());
-        canvas.width = this.settings.getLevelSize(); //horizontal resolution (?) - increase for better looking text
-        canvas.height = this.settings.getLevelSize(); //vertical resolution (?) - increase for better looking text
-        canvas.style.width = String(this.settings.getLevelSize()); //actual width of canvas
-        canvas.style.height = String(this.settings.getLevelSize()); //actual height of canvas
-
-        return canvas.getContext("2d");
-    }
-
-    public SETTINGS = {
-        GRID_SIZE: 30,
-        GAME_ID: 'game',
-        SIZE: 600
-    };
-
-    public ELEMENTS = {
-        WALL: 'WW',
-        FREE_SPACE: '00',
-        END_POINT: '!!'
-    };
-
-    public PLAYER_POSITION = {X: 2, Y: 2};
 
     public play() {
-        let context2d: CanvasRenderingContext2D = this.getContext2d();
+        this.gameBoard.drawLevel(this.currentLevel);
+        this.gameBoard.drawStatistics(this.levelNumber);
+        this.gameBoard.drawPlayer(this.player);
 
-        this.drawBoard(context2d);
-        this.drawPlayer(context2d);
+        if (this.gamePaused) {
+            this.showInfoMessage("GAME PAUSED");
+        }
     }
 
-    public drawBoard(context2d: CanvasRenderingContext2D) {
-        this.drawElements(context2d);
-    }
-
-    public drawElements(context2d: CanvasRenderingContext2D) {
-        this.board.forEach((elements: Array<string>, indexY: number) => {
-            elements.forEach((element: string, indexX: number) => {
-                let gridSize = this.settings.getGridSize();
-                context2d.beginPath();
-                context2d.arc(
-                    (indexX + 1) * gridSize,
-                    (indexY + 1) * gridSize,
-                    gridSize / 2,
-                    0,
-                    2 * Math.PI
-                );
-
-                if (element === this.ELEMENTS.WALL) {
-                    context2d.fillStyle = 'black';
-                } else if (element === this.ELEMENTS.END_POINT) {
-                    context2d.fillStyle = 'blue';
-                } else {
-                    context2d.fillStyle = 'white';
-                }
-                context2d.fill();
-            });
-        });
+    private generateNewLevel(): void {
+        this.gameBoard.nextLevel();
+        this.currentLevel = this.levelGenerator.generateLevel();
     }
 
     public KEY_CODES = {
         ARROW_UP: 38,
         ARROW_DOWN: 40,
         ARROW_LEFT: 37,
-        ARROW_RIGHT: 39
+        ARROW_RIGHT: 39,
+        P_KEY: 80
     };
 
-    public drawPlayer(context2d: CanvasRenderingContext2D) {
-        context2d.beginPath();
-        context2d.arc((this.PLAYER_POSITION.X + 1) * this.SETTINGS.GRID_SIZE, (this.PLAYER_POSITION.Y + 1) * this.SETTINGS.GRID_SIZE, this.SETTINGS.GRID_SIZE / 2, 0, 2 * Math.PI);
-        context2d.fillStyle = 'pink';
-        context2d.fill();
-    }
-
     public movePlayer(event: KeyboardEvent) {
+        if (!this.keyReleased) {
+            return;
+        }
+
+        this.keyReleased = false;
+
+        if (event.keyCode === this.KEY_CODES.P_KEY) {
+            this.pauseGame();
+        }
+
+        if (this.gamePaused) {
+            this.play();
+            return;
+        }
+
         if (event.keyCode === this.KEY_CODES.ARROW_UP) {
             this.tryToMoveUp();
         } else if (event.keyCode === this.KEY_CODES.ARROW_DOWN) {
@@ -108,50 +81,79 @@ export class GameManager {
         this.play();
 
         if (this.didWin()) {
-            setTimeout(this.showWinPage, 0);
+            setTimeout(() => this.showWinPage(), 0);
         }
     }
 
     public tryToMoveUp() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y - 1, this.PLAYER_POSITION.X)) {
-            this.PLAYER_POSITION.Y--;
+        let playerPositionY = this.player.getPositionY();
+        if (this.canMoveTo(playerPositionY - 1, this.player.getPositionX())) {
+            this.player.setPositionY(playerPositionY - 1);
         }
     }
 
     public tryToMoveDown() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y + 1, this.PLAYER_POSITION.X)) {
-            this.PLAYER_POSITION.Y++;
+        let playerPositionY = this.player.getPositionY();
+        if (this.canMoveTo(playerPositionY + 1, this.player.getPositionX())) {
+            this.player.setPositionY(playerPositionY + 1);
         }
     }
 
     public tryToMoveLeft() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y, this.PLAYER_POSITION.X - 1)) {
-            this.PLAYER_POSITION.X--;
+        let playerPositionX = this.player.getPositionX();
+        if (this.canMoveTo(this.player.getPositionY(), playerPositionX - 1)) {
+            this.player.setPositionX(playerPositionX - 1);
         }
     }
 
     public tryToMoveRight() {
-        if (this.canMoveTo(this.PLAYER_POSITION.Y, this.PLAYER_POSITION.X + 1)) {
-            this.PLAYER_POSITION.X++;
+        let playerPositionX = this.player.getPositionX();
+        if (this.canMoveTo(this.player.getPositionY(), playerPositionX + 1)) {
+            this.player.setPositionX(playerPositionX + 1);
         }
     }
 
-    public canMoveTo(newPositionY: any, newPositionX: any) {
-        return this.board[newPositionY][newPositionX] === this.ELEMENTS.FREE_SPACE ||
-            this.board[newPositionY][newPositionX] === this.ELEMENTS.END_POINT;
-
+    canMoveTo(newPositionY: number, newPositionX: number): boolean {
+        if (!(this.currentLevel[newPositionY] && this.currentLevel[newPositionY][newPositionX])) {
+            return false;
+        }
+        return this.currentLevel[newPositionY][newPositionX] === this.levelElements.getMazeCell() ||
+            this.currentLevel[newPositionY][newPositionX] === this.levelElements.getExit();
     }
 
     public didWin() {
-        return this.board[this.PLAYER_POSITION.Y][this.PLAYER_POSITION.X] === this.ELEMENTS.END_POINT
+        return this.currentLevel[this.player.getPositionY()][this.player.getPositionX()] ===
+            this.levelElements.getExit()
     }
 
     public showWinPage() {
         alert("YOU FOUND THE EXIT!");
+        this.nextLevel();
+    }
+
+    private nextLevel() {
+        this.levelNumber++;
+        this.generateNewLevel();
+        this.play();
+        this.showInfoMessage("NEW LEVEL");
+    }
+
+    private showInfoMessage(message: string): void {
+        this.gameBoard.drawInfoBox(message);
+    }
+
+    public pauseGame() {
+        this.gamePaused = !this.gamePaused;
+    }
+
+    private keepKeyPressedOnce(): void {
+        this.keyReleased = true;
     }
 
     public startGame() {
-        document.addEventListener('keydown', this.movePlayer.bind(this), false);
+        this.gameBoard.initializeBoard();
+        document.addEventListener('keydown', this.movePlayer, false);
+        document.addEventListener('keyup', this.keepKeyPressedOnce.bind(this), false);
         this.play();
     }
 

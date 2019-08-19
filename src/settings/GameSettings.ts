@@ -1,12 +1,8 @@
 export class GameSettings {
 
-    private GRID_SIZE = 30;
+    private GRID_SIZE = 8;
     private GAME_ID = 'game';
-    private LEVEL_SIZE = 600;
-
-    private ELEMENT_WALL = 'WW';
-    private ELEMENT_FREE_SPACE = '00';
-    private ELEMENT_END_POINT = '!!';
+    private LEVEL_SIZE = 500;
 
     public getGridSize(): number {
         return this.GRID_SIZE;
@@ -20,15 +16,4 @@ export class GameSettings {
         return this.LEVEL_SIZE;
     }
 
-    public getElementWall(): string {
-        return this.ELEMENT_WALL;
-    }
-
-    public getElementFreeSpace(): string {
-        return this.ELEMENT_FREE_SPACE;
-    }
-
-    public getElementEndPoint(): string {
-        return this.ELEMENT_END_POINT;
-    }
 }
